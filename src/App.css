@@ -1,58 +1,205 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
 body {
   margin: 0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif;
-  background-color: #f4f5f7;
-  color: #172b4d;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-.app-container {
-  padding: 40px;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f8f8f9;
+  color: #413f39;
 }
 
-h1 {
-  margin-bottom: 20px;
+#root {
+  height: 100%;
 }
 
-.board {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
+/* ── Board layout ── */
 
-.column {
-  width: 280px;
+.board-outer {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 10px;
 }
 
-.column h3 {
-  margin: 0 0 10px 10px;
-  font-size: 16px;
+.board-scroll {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 48px 34px 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.task-list {
-  padding: 8px;
-  min-height: 100px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+.board-inner {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  min-width: max-content;
+  flex: 1;
+  padding-bottom: 32px;
 }
 
-.card {
-  background-color: white;
-  padding: 12px;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  margin-bottom: 8px;
+/* ── Column ── */
+
+.kanban-column {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
+  margin-bottom: 18px;
+  padding-left: 15px;
+}
+
+.column-day-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #413f39;
+  line-height: 1.2;
+}
+
+.column-date {
   font-size: 14px;
-  user-select: none;
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+  color: #787878;
+  margin-top: 3px;
 }
 
-.card.dragging {
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+/* ── Add Activity button ── */
+
+.add-activity-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  width: 100%;
+  background: white;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  padding: 0 15px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #9d9c99;
+  text-align: left;
+}
+
+.add-activity-label {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.add-activity-btn:hover {
+  border-color: #dcdcdc;
+  background: #fafafa;
+}
+
+.add-activity-btn:hover .add-activity-label {
+  opacity: 1;
+}
+
+/* ── Card list (droppable) ── */
+
+.card-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 4px;
+  padding: 2px 0;
+  transition: background-color 0.15s ease;
+}
+
+.card-list.drag-over {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* ── Activity card ── */
+
+.activity-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: 80px;
+  background: white;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  padding: 9px;
+  cursor: grab;
+  user-select: none;
+}
+
+.activity-card.dragging {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  cursor: grabbing;
+}
+
+.card-image {
+  width: 62px;
+  height: 62px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background-color: #f0efed;
+  border: 0.5px solid rgba(203, 203, 203, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-separator {
+  width: 3px;
+  height: 50px;
+  flex-shrink: 0;
+  margin: 0 9px;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.card-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
+  min-width: 0;
+  padding-right: 24px;
+}
+
+.card-title {
+  color: #413f39;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-subtitle {
+  color: #787878;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-grade {
+  color: #413f39;
+}
+
+.card-menu {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  line-height: 0;
 }
