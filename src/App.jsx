@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./App.css";
+import GoalsPage from "./GoalsPage.jsx";
 
 const DAYS = [
   { id: "Monday", date: "24 Mar" },
@@ -252,57 +253,69 @@ export default function App() {
       {/* Main card */}
       <div className="main-card">
         <div className="main-header">
-          <div className="week-picker">
-            <button className="week-picker-btn"><ChevronLeftIcon /></button>
-            <div className="week-picker-divider" />
-            <span className="week-picker-label">This week</span>
-            <div className="week-picker-divider" />
-            <button className="week-picker-btn"><ChevronRightIcon /></button>
-          </div>
+          {activeNav === "Schedule" && (
+            <div className="week-picker">
+              <button className="week-picker-btn"><ChevronLeftIcon /></button>
+              <div className="week-picker-divider" />
+              <span className="week-picker-label">This week</span>
+              <div className="week-picker-divider" />
+              <button className="week-picker-btn"><ChevronRightIcon /></button>
+            </div>
+          )}
+          {activeNav === "Activities" && (
+            <span className="main-header-title">Activities</span>
+          )}
+          {activeNav === "Goals" && (
+            <span className="main-header-title">Goals</span>
+          )}
         </div>
 
         {/* Kanban board */}
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div
-            className="board-scroll"
-            ref={boardRef}
-            onMouseDown={onBoardMouseDown}
-            onMouseMove={onBoardMouseMove}
-          >
-            <div className="board-inner">
-              {DAYS.map((day) => (
-                <div key={day.id} className="kanban-column">
-                  <div className="column-header">
-                    <div className="column-day-name">{day.id}</div>
-                    <div className="column-date">{day.date}</div>
+        {activeNav === "Schedule" && (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <div
+              className="board-scroll"
+              ref={boardRef}
+              onMouseDown={onBoardMouseDown}
+              onMouseMove={onBoardMouseMove}
+            >
+              <div className="board-inner">
+                {DAYS.map((day) => (
+                  <div key={day.id} className="kanban-column">
+                    <div className="column-header">
+                      <div className="column-day-name">{day.id}</div>
+                      <div className="column-date">{day.date}</div>
+                    </div>
+                    <button className="add-activity-btn">
+                      <PlusIcon />
+                      <span className="add-activity-label">Add Activity</span>
+                    </button>
+                    <Droppable droppableId={day.id}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`card-list${snapshot.isDraggingOver ? " drag-over" : ""}`}
+                        >
+                          {columns[day.id].map((task, index) => (
+                            <Draggable key={task.id} draggableId={task.id} index={index}>
+                              {(provided, snapshot) => (
+                                <ActivityCard task={task} provided={provided} snapshot={snapshot} />
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
                   </div>
-                  <button className="add-activity-btn">
-                    <PlusIcon />
-                    <span className="add-activity-label">Add Activity</span>
-                  </button>
-                  <Droppable droppableId={day.id}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`card-list${snapshot.isDraggingOver ? " drag-over" : ""}`}
-                      >
-                        {columns[day.id].map((task, index) => (
-                          <Draggable key={task.id} draggableId={task.id} index={index}>
-                            {(provided, snapshot) => (
-                              <ActivityCard task={task} provided={provided} snapshot={snapshot} />
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </DragDropContext>
+          </DragDropContext>
+        )}
+
+        {activeNav === "Goals" && <GoalsPage />}
       </div>
     </div>
   );

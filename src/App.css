@@ -39,6 +39,8 @@ body {
   display: flex;
   flex-direction: column;
   padding-top: 16px;
+  position: relative;
+  z-index: 6000;
 }
 
 .sidebar-brand {
@@ -111,6 +113,15 @@ body {
   align-items: center;
   justify-content: flex-end;
   padding: 0 20px;
+}
+
+/* ── Main header title (non-Schedule pages) ── */
+
+.main-header-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #413f39;
+  flex: 1;
 }
 
 /* ── Week picker ── */
@@ -266,7 +277,7 @@ body {
 }
 
 .card-list.drag-over {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(180, 180, 180, 0.25);
 }
 
 /* ── Activity card ── */
