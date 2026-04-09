@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./App.css";
 import GoalsPage from "./GoalsPage.jsx";
+import Goals2Page from "./Goals2Page.jsx";
 
 const DAYS = [
   { id: "Monday", date: "24 Mar" },
@@ -82,6 +83,18 @@ function GoalsIcon() {
       <circle cx="8" cy="8" r="6" stroke="#787878" strokeWidth="1.2" />
       <circle cx="8" cy="8" r="3.5" stroke="#787878" strokeWidth="1.2" />
       <circle cx="8" cy="8" r="1" fill="#787878" />
+    </svg>
+  );
+}
+
+function Goals2Icon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="4" cy="8" r="1.5" stroke="#787878" strokeWidth="1.2" />
+      <circle cx="12" cy="4.5" r="1.5" stroke="#787878" strokeWidth="1.2" />
+      <circle cx="12" cy="11.5" r="1.5" stroke="#787878" strokeWidth="1.2" />
+      <path d="M5.5 8L10.5 4.5" stroke="#787878" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M5.5 8L10.5 11.5" stroke="#787878" strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -226,6 +239,7 @@ export default function App() {
     { label: "Schedule", icon: <ScheduleIcon /> },
     { label: "Activities", icon: <ActivitiesIcon /> },
     { label: "Goals", icon: <GoalsIcon /> },
+    { label: "Goals 2", icon: <Goals2Icon /> },
   ];
 
   return (
@@ -267,6 +281,9 @@ export default function App() {
           )}
           {activeNav === "Goals" && (
             <span className="main-header-title">Goals</span>
+          )}
+          {activeNav === "Goals 2" && (
+            <span className="main-header-title">Goals 2</span>
           )}
         </div>
 
@@ -316,6 +333,7 @@ export default function App() {
         )}
 
         {activeNav === "Goals" && <GoalsPage />}
+        {activeNav === "Goals 2" && <Goals2Page />}
       </div>
     </div>
   );

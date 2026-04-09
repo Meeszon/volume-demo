@@ -1,0 +1,278 @@
+/* ── Layout ── */
+
+.goals2-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Tree panel ── */
+
+.goals2-tree-panel {
+  flex: 0 0 380px;
+  border-right: 1px solid #f0f0f0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e0e0e0 transparent;
+}
+
+.goals2-tree-panel::-webkit-scrollbar { width: 5px; }
+.goals2-tree-panel::-webkit-scrollbar-track { background: transparent; }
+.goals2-tree-panel::-webkit-scrollbar-thumb { background-color: #e0e0e0; border-radius: 9999px; }
+
+/* ── Root-level node separator ── */
+
+.tree-root-node {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* ── Tree row (branch or leaf) ── */
+
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding-right: 20px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  color: #787878;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.tree-branch {
+  font-weight: 600;
+  color: #413f39;
+  font-size: 13px;
+}
+
+.tree-row:hover {
+  background-color: rgba(0, 0, 0, 0.025);
+}
+
+.tree-leaf.selected {
+  color: #413f39;
+  background-color: #f0f0f0;
+}
+
+/* ── Leaf dot indicator ── */
+
+.tree-leaf-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: #dcdcdc;
+  transition: background-color 0.1s ease;
+}
+
+.tree-leaf-dot.on {
+  background-color: #413f39;
+}
+
+/* ── Children collapse wrapper ── */
+
+.tree-children-wrapper {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.2s ease;
+}
+
+.tree-children-wrapper.open {
+  max-height: 2000px;
+}
+
+/* ── Children group — vertical connector line ── */
+
+.tree-children {
+  border-left: 1px solid #e8e8e6;
+  margin-left: 25px;
+}
+
+/*
+  Horizontal arm on every direct child row.
+  .tree-children > .tree-node > .tree-row targets only immediate children,
+  not deeper descendants, so nesting works correctly at any depth.
+*/
+.tree-children > .tree-node > .tree-row {
+  position: relative;
+}
+
+.tree-children > .tree-node > .tree-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 11px;
+  height: 1px;
+  background-color: #e8e8e6;
+  transform: translateY(-50%);
+}
+
+/* ── Detail panel ── */
+
+.goals2-detail-panel {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: #e0e0e0 transparent;
+}
+
+.goals2-detail-panel::-webkit-scrollbar { width: 5px; }
+.goals2-detail-panel::-webkit-scrollbar-track { background: transparent; }
+.goals2-detail-panel::-webkit-scrollbar-thumb { background-color: #e0e0e0; border-radius: 9999px; }
+
+/* ── Empty state ── */
+
+.goals2-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 8px;
+  font-size: 14px;
+  color: #9d9c99;
+  text-align: center;
+  padding: 40px;
+}
+
+.goals2-empty-sub {
+  font-size: 12px;
+  color: #c4c3c0;
+  max-width: 200px;
+  line-height: 1.5;
+}
+
+/* ── My Goals inner ── */
+
+.goals2-detail-inner {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px;
+  flex: 1;
+}
+
+.goals2-my-goals-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #413f39;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.goals2-my-goals-sub {
+  font-size: 12px;
+  color: #b0afa9;
+  margin-bottom: 16px;
+}
+
+.goals2-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Goal card ── */
+
+.goal2-card {
+  background: white;
+  border: 1px solid #f0f0f0;
+  border-left: 3px solid #dcdcdc;
+  border-radius: 4px;
+  padding: 13px 15px 12px;
+}
+
+.goal2-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.goal2-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.goal2-path {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #b0afa9;
+}
+
+.goal2-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #413f39;
+}
+
+.goal2-remove-btn {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1;
+  color: #c4c3c0;
+  cursor: pointer;
+  padding: 0 2px;
+  font-family: Arial, Helvetica, sans-serif;
+  flex-shrink: 0;
+  margin-top: -1px;
+}
+
+.goal2-remove-btn:hover {
+  color: #787878;
+}
+
+/* ── Exercises toggle ── */
+
+.goal2-exercises-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 9px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #9d9c99;
+  cursor: pointer;
+  padding: 0;
+}
+
+.goal2-exercises-toggle:hover {
+  color: #787878;
+}
+
+/* ── Exercise list ── */
+
+.goal2-exercises-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.goal2-exercise-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.goal2-exercise-name {
+  font-size: 13px;
+  color: #413f39;
+}
+
+.goal2-exercise-detail {
+  font-size: 12px;
+  color: #787878;
+}
