@@ -358,8 +358,8 @@ function GoalCard({ skill, onRemove }) {
       </button>
       {showExercises && (
         <div className="goal-exercises-list">
-          {skill.exercises.map((ex, i) => (
-            <div key={i} className="goal-exercise-item">
+          {skill.exercises.map((ex) => (
+            <div key={ex.name} className="goal-exercise-item">
               <span className="goal-exercise-name">{ex.name}</span>
               <span className="goal-exercise-detail">{ex.detail}</span>
             </div>

@@ -365,20 +365,7 @@ const SKILL_TREE = [
 /* ── Helpers ── */
 
 function isLeaf(node) {
-  return !node.children || node.children.length === 0;
-}
-
-// Returns the path labels (ancestor → leaf) for a given leaf id
-function findPath(nodes, targetId, currentPath = []) {
-  for (const node of nodes) {
-    const path = [...currentPath, node.label];
-    if (node.id === targetId) return path;
-    if (node.children) {
-      const found = findPath(node.children, targetId, path);
-      if (found) return found;
-    }
-  }
-  return null;
+  return !node.children;
 }
 
 // Collect all selected leaf nodes with their ancestor path
@@ -489,8 +476,8 @@ function GoalCard({ skill, onRemove }) {
       </button>
       {showExercises && (
         <div className="goal2-exercises-list">
-          {skill.exercises.map((ex, i) => (
-            <div key={i} className="goal2-exercise-item">
+          {skill.exercises.map((ex) => (
+            <div key={ex.name} className="goal2-exercise-item">
               <span className="goal2-exercise-name">{ex.name}</span>
               <span className="goal2-exercise-detail">{ex.detail}</span>
             </div>

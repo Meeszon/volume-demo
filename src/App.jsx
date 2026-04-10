@@ -254,8 +254,11 @@ export default function App() {
           {navItems.map(({ label, icon }) => (
             <div
               key={label}
+              role="button"
+              tabIndex={0}
               className={`nav-item${activeNav === label ? " active" : ""}`}
               onClick={() => setActiveNav(label)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setActiveNav(label); }}
             >
               {icon}
               <span>{label}</span>
