@@ -1,6 +1,31 @@
+/* ── Page shell ── */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.header {
+  height: 50px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.headerTitle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #413f39;
+}
+
 /* ── Layout ── */
 
-.goals2-layout {
+.layout {
   display: flex;
   flex: 1;
   min-height: 0;
@@ -8,7 +33,7 @@
 
 /* ── Tree panel ── */
 
-.goals2-tree-panel {
+.treePanel {
   flex: 0 0 380px;
   border-right: 1px solid #f0f0f0;
   overflow-y: auto;
@@ -16,19 +41,28 @@
   scrollbar-color: #e0e0e0 transparent;
 }
 
-.goals2-tree-panel::-webkit-scrollbar { width: 5px; }
-.goals2-tree-panel::-webkit-scrollbar-track { background: transparent; }
-.goals2-tree-panel::-webkit-scrollbar-thumb { background-color: #e0e0e0; border-radius: 9999px; }
+.treePanel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.treePanel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.treePanel::-webkit-scrollbar-thumb {
+  background-color: #e0e0e0;
+  border-radius: 9999px;
+}
 
 /* ── Root-level node separator ── */
 
-.tree-root-node {
+.treeRootNode {
   border-bottom: 1px solid #f0f0f0;
 }
 
 /* ── Tree row (branch or leaf) ── */
 
-.tree-row {
+.treeRow {
   display: flex;
   align-items: center;
   gap: 7px;
@@ -38,27 +72,29 @@
   user-select: none;
   font-size: 13px;
   color: #787878;
-  transition: background-color 0.1s ease, color 0.1s ease;
+  transition:
+    background-color 0.1s ease,
+    color 0.1s ease;
 }
 
-.tree-branch {
+.treeBranch {
   font-weight: 600;
   color: #413f39;
   font-size: 13px;
 }
 
-.tree-row:hover {
+.treeRow:hover {
   background-color: rgba(0, 0, 0, 0.025);
 }
 
-.tree-leaf.selected {
+.treeLeafSelected {
   color: #413f39;
   background-color: #f0f0f0;
 }
 
 /* ── Leaf dot indicator ── */
 
-.tree-leaf-dot {
+.treeLeafDot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
@@ -67,39 +103,38 @@
   transition: background-color 0.1s ease;
 }
 
-.tree-leaf-dot.on {
+.treeLeafDotOn {
   background-color: #413f39;
 }
 
 /* ── Children collapse wrapper ── */
 
-.tree-children-wrapper {
+.treeChildrenWrapper {
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.2s ease;
 }
 
-.tree-children-wrapper.open {
+.treeChildrenWrapperOpen {
   max-height: 2000px;
 }
 
 /* ── Children group — vertical connector line ── */
 
-.tree-children {
+.treeChildren {
   border-left: 1px solid #e8e8e6;
   margin-left: 25px;
 }
 
 /*
   Horizontal arm on every direct child row.
-  .tree-children > .tree-node > .tree-row targets only immediate children,
-  not deeper descendants, so nesting works correctly at any depth.
+  Targets only immediate children, not deeper descendants, so nesting works at any depth.
 */
-.tree-children > .tree-node > .tree-row {
+.treeChildren > .treeNode > .treeRow {
   position: relative;
 }
 
-.tree-children > .tree-node > .tree-row::before {
+.treeChildren > .treeNode > .treeRow::before {
   content: "";
   position: absolute;
   left: 0;
@@ -112,7 +147,7 @@
 
 /* ── Detail panel ── */
 
-.goals2-detail-panel {
+.detailPanel {
   flex: 1;
   overflow-y: auto;
   display: flex;
@@ -121,13 +156,22 @@
   scrollbar-color: #e0e0e0 transparent;
 }
 
-.goals2-detail-panel::-webkit-scrollbar { width: 5px; }
-.goals2-detail-panel::-webkit-scrollbar-track { background: transparent; }
-.goals2-detail-panel::-webkit-scrollbar-thumb { background-color: #e0e0e0; border-radius: 9999px; }
+.detailPanel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.detailPanel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.detailPanel::-webkit-scrollbar-thumb {
+  background-color: #e0e0e0;
+  border-radius: 9999px;
+}
 
 /* ── Empty state ── */
 
-.goals2-empty-state {
+.emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -140,7 +184,7 @@
   padding: 40px;
 }
 
-.goals2-empty-sub {
+.emptySub {
   font-size: 12px;
   color: #c4c3c0;
   max-width: 200px;
@@ -149,14 +193,14 @@
 
 /* ── My Goals inner ── */
 
-.goals2-detail-inner {
+.detailInner {
   display: flex;
   flex-direction: column;
   padding: 20px 24px;
   flex: 1;
 }
 
-.goals2-my-goals-title {
+.myGoalsTitle {
   font-size: 16px;
   font-weight: bold;
   color: #413f39;
@@ -164,13 +208,13 @@
   margin-bottom: 4px;
 }
 
-.goals2-my-goals-sub {
+.myGoalsSub {
   font-size: 12px;
   color: #b0afa9;
   margin-bottom: 16px;
 }
 
-.goals2-card-list {
+.cardList {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -178,7 +222,7 @@
 
 /* ── Goal card ── */
 
-.goal2-card {
+.goalCard {
   background: white;
   border: 1px solid #f0f0f0;
   border-left: 3px solid #dcdcdc;
@@ -186,20 +230,20 @@
   padding: 13px 15px 12px;
 }
 
-.goal2-card-header {
+.goalCardHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
 }
 
-.goal2-card-meta {
+.goalCardMeta {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.goal2-path {
+.goalPath {
   font-size: 11px;
   font-weight: bold;
   text-transform: uppercase;
@@ -207,13 +251,13 @@
   color: #b0afa9;
 }
 
-.goal2-name {
+.goalName {
   font-size: 14px;
   font-weight: bold;
   color: #413f39;
 }
 
-.goal2-remove-btn {
+.removeBtn {
   border: none;
   background: transparent;
   font-size: 16px;
@@ -226,13 +270,13 @@
   margin-top: -1px;
 }
 
-.goal2-remove-btn:hover {
+.removeBtn:hover {
   color: #787878;
 }
 
 /* ── Exercises toggle ── */
 
-.goal2-exercises-toggle {
+.exercisesToggle {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -246,13 +290,13 @@
   padding: 0;
 }
 
-.goal2-exercises-toggle:hover {
+.exercisesToggle:hover {
   color: #787878;
 }
 
 /* ── Exercise list ── */
 
-.goal2-exercises-list {
+.exercisesList {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
@@ -261,18 +305,18 @@
   border-top: 1px solid #f0f0f0;
 }
 
-.goal2-exercise-item {
+.exerciseItem {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.goal2-exercise-name {
+.exerciseName {
   font-size: 13px;
   color: #413f39;
 }
 
-.goal2-exercise-detail {
+.exerciseDetail {
   font-size: 12px;
   color: #787878;
 }

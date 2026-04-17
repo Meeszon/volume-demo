@@ -1,111 +1,16 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #ecedee;
-  color: #413f39;
-}
-
-#root {
-  height: 100%;
-}
-
-/* ── Page layout ── */
+/* ── Page shell ── */
 
 .page {
-  height: 100%;
-  display: flex;
-  padding: 11px 12px;
-  gap: 12px;
-}
-
-/* ── Sidebar ── */
-
-.sidebar {
-  width: 176px;
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  padding-top: 16px;
-  position: relative;
-  z-index: 6000;
-}
-
-.sidebar-brand {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0 7px;
-  height: 28px;
-  margin-bottom: 12px;
-  cursor: pointer;
-}
-
-.sidebar-title {
-  font-size: 16px;
-  font-weight: bold;
-  color: #787878;
-  line-height: 1;
-}
-
-/* ── Nav ── */
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 176px;
-  height: 28px;
-  border-radius: 4px;
-  padding: 0 7px;
-  font-size: 14px;
-  color: #787878;
-  cursor: pointer;
-  user-select: none;
-}
-
-.nav-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.nav-item.active {
-  background-color: #dcdcdc;
-}
-
-/* ── Main card ── */
-
-.main-card {
   flex: 1;
-  min-width: 0;
-  background: #f8f8f9;
-  border: 1px solid #dcdcdc;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
+  min-height: 0;
   overflow: hidden;
 }
 
-/* ── Card header ── */
+/* ── Header ── */
 
-.main-header {
+.header {
   height: 50px;
   flex-shrink: 0;
   border-bottom: 1px solid #f0f0f0;
@@ -115,18 +20,9 @@ body {
   padding: 0 20px;
 }
 
-/* ── Main header title (non-Schedule pages) ── */
-
-.main-header-title {
-  font-size: 14px;
-  font-weight: bold;
-  color: #413f39;
-  flex: 1;
-}
-
 /* ── Week picker ── */
 
-.week-picker {
+.weekPicker {
   display: flex;
   align-items: center;
   height: 28px;
@@ -136,7 +32,7 @@ body {
   overflow: hidden;
 }
 
-.week-picker-btn {
+.weekPickerBtn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,18 +45,18 @@ body {
   flex-shrink: 0;
 }
 
-.week-picker-btn:hover {
+.weekPickerBtn:hover {
   background-color: #f5f5f5;
 }
 
-.week-picker-divider {
+.weekPickerDivider {
   width: 1px;
   height: 100%;
   background-color: #dcdcdc;
   flex-shrink: 0;
 }
 
-.week-picker-label {
+.weekPickerLabel {
   font-size: 14px;
   color: #787878;
   padding: 0 12px;
@@ -169,7 +65,7 @@ body {
 
 /* ── Board layout ── */
 
-.board-scroll {
+.boardScroll {
   flex: 1;
   overflow-x: auto;
   overflow-y: auto;
@@ -180,21 +76,21 @@ body {
   scrollbar-color: #e0e0e0 transparent;
 }
 
-.board-scroll::-webkit-scrollbar {
+.boardScroll::-webkit-scrollbar {
   height: 5px;
   width: 5px;
 }
 
-.board-scroll::-webkit-scrollbar-track {
+.boardScroll::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.board-scroll::-webkit-scrollbar-thumb {
+.boardScroll::-webkit-scrollbar-thumb {
   background-color: #e0e0e0;
   border-radius: 9999px;
 }
 
-.board-inner {
+.boardInner {
   display: flex;
   gap: 16px;
   align-items: stretch;
@@ -204,26 +100,26 @@ body {
 
 /* ── Column ── */
 
-.kanban-column {
+.kanbanColumn {
   width: 280px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
 }
 
-.column-header {
+.columnHeader {
   margin-bottom: 18px;
   padding-left: 15px;
 }
 
-.column-day-name {
+.columnDayName {
   font-size: 20px;
   font-weight: bold;
   color: #413f39;
   line-height: 1.2;
 }
 
-.column-date {
+.columnDate {
   font-size: 14px;
   color: #787878;
   margin-top: 3px;
@@ -231,7 +127,7 @@ body {
 
 /* ── Add Activity button ── */
 
-.add-activity-btn {
+.addActivityBtn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -250,23 +146,23 @@ body {
   text-align: left;
 }
 
-.add-activity-label {
+.addActivityLabel {
   opacity: 0;
   transition: opacity 0.15s ease;
 }
 
-.add-activity-btn:hover {
+.addActivityBtn:hover {
   border-color: #dcdcdc;
   background: #fafafa;
 }
 
-.add-activity-btn:hover .add-activity-label {
+.addActivityBtn:hover .addActivityLabel {
   opacity: 1;
 }
 
 /* ── Card list (droppable) ── */
 
-.card-list {
+.cardList {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -276,13 +172,13 @@ body {
   transition: background-color 0.15s ease;
 }
 
-.card-list.drag-over {
+.cardListDragOver {
   background-color: rgba(180, 180, 180, 0.25);
 }
 
 /* ── Activity card ── */
 
-.activity-card {
+.activityCard {
   position: relative;
   display: flex;
   align-items: flex-start;
@@ -296,12 +192,12 @@ body {
   user-select: none;
 }
 
-.activity-card.dragging {
+.activityCard.dragging {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   cursor: grabbing;
 }
 
-.card-image {
+.cardImage {
   width: 62px;
   height: 62px;
   flex-shrink: 0;
@@ -313,7 +209,7 @@ body {
   justify-content: center;
 }
 
-.card-separator {
+.cardSeparator {
   width: 3px;
   height: 50px;
   flex-shrink: 0;
@@ -322,7 +218,7 @@ body {
   align-self: center;
 }
 
-.card-text {
+.cardText {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -332,14 +228,14 @@ body {
   padding-right: 24px;
 }
 
-.card-title {
+.cardTitle {
   color: #413f39;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.card-subtitle {
+.cardSubtitle {
   color: #787878;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -347,11 +243,11 @@ body {
   overflow: hidden;
 }
 
-.card-grade {
+.cardGrade {
   color: #413f39;
 }
 
-.card-menu {
+.cardMenu {
   position: absolute;
   top: 13px;
   right: 13px;

@@ -3,7 +3,15 @@
     "allow": [
       "mcp__figma__get_design_context",
       "mcp__figma__get_screenshot",
-      "Skill(code-review:code-review)"
+      "Skill(code-review:code-review)",
+      "Bash(wc *)",
+      "Bash(grep -E \"\\\\.\\(jsx?|tsx?\\)$\")",
+      "Bash(npm run *)",
+      "Bash(npm ls *)",
+      "Bash(ls *)",
+      "Bash(npm install *)",
+      "Bash(npm list *)",
+      "Bash(npm test *)"
     ]
   }
 }
