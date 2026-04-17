@@ -8,7 +8,7 @@ export const ACTIVITIES: Activity[] = [
     accent: "#d4a853",
     goalTags: [
       { nodeId: "board-climbing", nodeLabel: "Board Climbing" },
-      { nodeId: "core-compression", nodeLabel: "Core Compression" },
+      { nodeId: "core", nodeLabel: "Core" },
     ],
   },
   {
@@ -36,9 +36,7 @@ export const ACTIVITIES: Activity[] = [
     title: "ARC Training",
     subtitle: "30 min continuous climbing · steady pace",
     accent: "#27ae60",
-    goalTags: [
-      { nodeId: "arc-training", nodeLabel: "ARC Training" },
-    ],
+    goalTags: [{ nodeId: "arc-training", nodeLabel: "ARC Training" }],
   },
   {
     id: "act-four-by-fours",
@@ -65,9 +63,7 @@ export const ACTIVITIES: Activity[] = [
     title: "Hollow Body & Tension",
     subtitle: "20–30s holds · 3 sets · full tension",
     accent: "#16a085",
-    goalTags: [
-      { nodeId: "core-compression", nodeLabel: "Core Compression" },
-    ],
+    goalTags: [{ nodeId: "core", nodeLabel: "Core" }],
   },
   {
     id: "act-toe-hook-session",
@@ -86,7 +82,7 @@ export const ACTIVITIES: Activity[] = [
     accent: "#7f8c8d",
     goalTags: [
       { nodeId: "drop-knee", nodeLabel: "Drop Knee" },
-      { nodeId: "hip-rotation-ov", nodeLabel: "Hip Rotation" },
+      { nodeId: "hip-rotation", nodeLabel: "Hip Rotation" },
     ],
   },
   {
