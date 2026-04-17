@@ -1,0 +1,41 @@
+import { NavLink } from "react-router-dom";
+import {
+  ScheduleIcon,
+  ActivitiesIcon,
+  GoalsIcon,
+  Goals2Icon,
+  ChevronDownIcon,
+} from "../icons";
+import styles from "./Sidebar.module.css";
+
+const NAV_ITEMS = [
+  { to: "/schedule", label: "Schedule", icon: <ScheduleIcon /> },
+  { to: "/activities", label: "Activities", icon: <ActivitiesIcon /> },
+  { to: "/goals", label: "Goals", icon: <GoalsIcon /> },
+  { to: "/goals2", label: "Goals 2", icon: <Goals2Icon /> },
+] as const;
+
+export function Sidebar() {
+  return (
+    <aside className={styles.sidebar}>
+      <div className={styles.sidebarBrand}>
+        <span className={styles.sidebarTitle}>Volume</span>
+        <ChevronDownIcon />
+      </div>
+      <nav className={styles.sidebarNav}>
+        {NAV_ITEMS.map(({ to, label, icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `${styles.navItem}${isActive ? ` ${styles.active}` : ""}`
+            }
+          >
+            {icon}
+            <span>{label}</span>
+          </NavLink>
+        ))}
+      </nav>
+    </aside>
+  );
+}

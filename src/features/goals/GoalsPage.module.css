@@ -1,6 +1,31 @@
+/* ── Page shell ── */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.header {
+  height: 50px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.headerTitle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #413f39;
+}
+
 /* ── Goals layout ── */
 
-.goals-layout {
+.layout {
   display: flex;
   flex: 1;
   min-height: 0;
@@ -8,7 +33,7 @@
 
 /* ── Tree panel ── */
 
-.goals-tree-panel {
+.treePanel {
   flex: 0 0 380px;
   border-right: 1px solid #f0f0f0;
   overflow-y: auto;
@@ -16,13 +41,29 @@
   scrollbar-color: #e0e0e0 transparent;
 }
 
+.treePanel::-webkit-scrollbar,
+.detailPanel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.treePanel::-webkit-scrollbar-track,
+.detailPanel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.treePanel::-webkit-scrollbar-thumb,
+.detailPanel::-webkit-scrollbar-thumb {
+  background-color: #e0e0e0;
+  border-radius: 9999px;
+}
+
 /* ── Category block ── */
 
-.goals-category-block {
+.categoryBlock {
   border-bottom: 1px solid #f0f0f0;
 }
 
-.goals-category-header {
+.categoryHeader {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -32,51 +73,51 @@
   user-select: none;
 }
 
-.goals-category-header:hover {
+.categoryHeader:hover {
   background-color: rgba(0, 0, 0, 0.02);
 }
 
-.goals-category-dot {
+.categoryDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.goals-category-label {
+.categoryLabel {
   flex: 1;
   font-size: 14px;
   font-weight: bold;
   color: #413f39;
 }
 
-.goals-category-count {
+.categoryCount {
   font-size: 12px;
   font-weight: bold;
 }
 
 /* ── Collapse wrapper ── */
 
-.goals-category-body-wrapper {
+.categoryBodyWrapper {
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.2s ease;
 }
 
-.goals-category-body-wrapper.open {
+.categoryBodyWrapper.open {
   max-height: 500px;
 }
 
 /* ── Skill chips ── */
 
-.goals-category-body {
+.categoryBody {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   padding: 10px 20px 14px 36px;
 }
 
-.goals-skill-chip {
+.skillChip {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -90,39 +131,24 @@
   color: #787878;
   cursor: pointer;
   user-select: none;
-  transition: border-color 0.12s ease, color 0.12s ease, background-color 0.12s ease;
+  transition:
+    border-color 0.12s ease,
+    color 0.12s ease,
+    background-color 0.12s ease;
 }
 
-.goals-skill-chip:hover {
+.skillChip:hover {
   border-color: #c0c0c0;
   color: #413f39;
 }
 
-.goals-skill-chip.selected {
+.skillChip.selected {
   color: white;
-}
-
-/* ── Shared scrollbar styling ── */
-
-.goals-tree-panel::-webkit-scrollbar,
-.goals-detail-panel::-webkit-scrollbar {
-  width: 5px;
-}
-
-.goals-tree-panel::-webkit-scrollbar-track,
-.goals-detail-panel::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.goals-tree-panel::-webkit-scrollbar-thumb,
-.goals-detail-panel::-webkit-scrollbar-thumb {
-  background-color: #e0e0e0;
-  border-radius: 9999px;
 }
 
 /* ── Detail panel ── */
 
-.goals-detail-panel {
+.detailPanel {
   flex: 1;
   overflow-y: auto;
   display: flex;
@@ -133,7 +159,7 @@
 
 /* ── Empty state ── */
 
-.goals-empty-state {
+.emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -146,7 +172,7 @@
   padding: 40px;
 }
 
-.goals-empty-sub {
+.emptySub {
   font-size: 12px;
   color: #c4c3c0;
   max-width: 200px;
@@ -155,18 +181,18 @@
 
 /* ── My Goals panel ── */
 
-.goals-detail-inner {
+.detailInner {
   display: flex;
   flex-direction: column;
   padding: 20px 24px;
   flex: 1;
 }
 
-.goals-my-goals-header {
+.myGoalsHeader {
   margin-bottom: 4px;
 }
 
-.goals-my-goals-title {
+.myGoalsTitle {
   font-size: 16px;
   font-weight: bold;
   color: #413f39;
@@ -174,7 +200,7 @@
   margin-bottom: 4px;
 }
 
-.goals-my-goals-sub {
+.myGoalsSub {
   font-size: 12px;
   color: #b0afa9;
   margin-bottom: 16px;
@@ -182,13 +208,13 @@
 
 /* ── Goal cards ── */
 
-.goals-card-list {
+.cardList {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.goal-card {
+.goalCard {
   background: white;
   border: 1px solid #f0f0f0;
   border-left-width: 3px;
@@ -196,33 +222,33 @@
   padding: 13px 15px 12px;
 }
 
-.goal-card-header {
+.goalCardHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
 }
 
-.goal-card-meta {
+.goalCardMeta {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.goal-card-category {
+.goalCardCategory {
   font-size: 11px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
-.goal-card-name {
+.goalCardName {
   font-size: 14px;
   font-weight: bold;
   color: #413f39;
 }
 
-.goals-remove-btn {
+.removeBtn {
   border: none;
   background: transparent;
   font-size: 16px;
@@ -235,13 +261,13 @@
   margin-top: -1px;
 }
 
-.goals-remove-btn:hover {
+.removeBtn:hover {
   color: #787878;
 }
 
 /* ── Exercises toggle ── */
 
-.goal-exercises-toggle {
+.exercisesToggle {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -255,13 +281,13 @@
   padding: 0;
 }
 
-.goal-exercises-toggle:hover {
+.exercisesToggle:hover {
   color: #787878;
 }
 
 /* ── Exercise list ── */
 
-.goal-exercises-list {
+.exercisesList {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
@@ -270,18 +296,18 @@
   border-top: 1px solid #f0f0f0;
 }
 
-.goal-exercise-item {
+.exerciseItem {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.goal-exercise-name {
+.exerciseName {
   font-size: 13px;
   color: #413f39;
 }
 
-.goal-exercise-detail {
+.exerciseDetail {
   font-size: 12px;
   color: #787878;
 }

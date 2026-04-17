@@ -1,7 +1,6 @@
-import { useState } from "react";
-import "./GoalsPage.css";
+import type { Category } from "../types";
 
-const SKILL_TREE = [
+export const SKILL_TREE_V1: Category[] = [
   {
     id: "conditioning",
     label: "Conditioning",
@@ -138,7 +137,10 @@ const SKILL_TREE = [
           { name: "Wrist Circles", detail: "10 clockwise + 10 counterclockwise · daily warm-up" },
           { name: "Prayer / Reverse Prayer", detail: "30s each position × 3 · flexors and extensors" },
           { name: "Wrist Roller", detail: "3 rolls up + 3 rolls down · light load" },
-          { name: "Neutral Wrist Loading", detail: "Avoid cocked-wrist positions on crimps during prehab phases" },
+          {
+            name: "Neutral Wrist Loading",
+            detail: "Avoid cocked-wrist positions on crimps during prehab phases",
+          },
         ],
       },
     ],
@@ -152,7 +154,10 @@ const SKILL_TREE = [
         id: "power-endurance",
         label: "Power Endurance",
         exercises: [
-          { name: "4×4s", detail: "4 problems × 4 sets · 1 min rest between, 4 min between sets" },
+          {
+            name: "4×4s",
+            detail: "4 problems × 4 sets · 1 min rest between, 4 min between sets",
+          },
           { name: "Bouldering Circuits", detail: "10 linked problems non-stop · 3 rounds / 5 min rest" },
           { name: "Campus Endurance Ladders", detail: "1-3-5-7 pattern · 6 reps · 2 min rest" },
           { name: "ARC Training", detail: "20–40 min continuous easy climbing on auto-belay" },
@@ -265,198 +270,3 @@ const SKILL_TREE = [
     ],
   },
 ];
-
-function ChevronIcon({ open }) {
-  return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="none"
-      style={{
-        transform: open ? "rotate(90deg)" : "rotate(0deg)",
-        transition: "transform 0.2s ease",
-        flexShrink: 0,
-      }}
-    >
-      <path d="M4.5 9L7.5 6l-3-3" stroke="#9d9c99" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-      <path d="M2 5.5l2.5 2.5 4.5-4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function CategoryBlock({ category, expandedCategories, selectedSkills, onToggleCategory, onToggleSkill }) {
-  const isOpen = expandedCategories.has(category.id);
-  const selectedCount = category.skills.filter(s => selectedSkills.has(s.id)).length;
-
-  return (
-    <div className="goals-category-block">
-      <div className="goals-category-header" onClick={() => onToggleCategory(category.id)}>
-        <ChevronIcon open={isOpen} />
-        <span className="goals-category-dot" style={{ backgroundColor: category.color }} />
-        <span className="goals-category-label">{category.label}</span>
-        {selectedCount > 0 && (
-          <span className="goals-category-count" style={{ color: category.color }}>
-            {selectedCount} selected
-          </span>
-        )}
-      </div>
-      <div className={`goals-category-body-wrapper${isOpen ? " open" : ""}`}>
-        <div className="goals-category-body">
-          {category.skills.map((skill) => {
-            const isSelected = selectedSkills.has(skill.id);
-            return (
-              <button
-                key={skill.id}
-                className={`goals-skill-chip${isSelected ? " selected" : ""}`}
-                style={isSelected ? { backgroundColor: category.color, borderColor: category.color } : {}}
-                onClick={() => onToggleSkill(skill.id)}
-              >
-                {isSelected && <CheckIcon />}
-                {skill.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function GoalCard({ skill, onRemove }) {
-  const [showExercises, setShowExercises] = useState(false);
-
-  return (
-    <div className="goal-card" style={{ borderLeftColor: skill.categoryColor }}>
-      <div className="goal-card-header">
-        <div className="goal-card-meta">
-          <span className="goal-card-category" style={{ color: skill.categoryColor }}>
-            {skill.categoryLabel}
-          </span>
-          <span className="goal-card-name">{skill.label}</span>
-        </div>
-        <button className="goals-remove-btn" onClick={() => onRemove(skill.id)}>×</button>
-      </div>
-      <button
-        className="goal-exercises-toggle"
-        onClick={() => setShowExercises(v => !v)}
-      >
-        {showExercises ? "Hide" : "Show"} suggested exercises
-        <svg
-          width="10" height="10" viewBox="0 0 10 10" fill="none"
-          style={{ transform: showExercises ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.15s ease" }}
-        >
-          <path d="M2 3.5L5 6.5l3-3" stroke="#9d9c99" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-      {showExercises && (
-        <div className="goal-exercises-list">
-          {skill.exercises.map((ex) => (
-            <div key={ex.name} className="goal-exercise-item">
-              <span className="goal-exercise-name">{ex.name}</span>
-              <span className="goal-exercise-detail">{ex.detail}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function GoalsPage() {
-  const [expandedCategories, setExpandedCategories] = useState(
-    () => new Set(SKILL_TREE.map(c => c.id))
-  );
-  const [selectedSkills, setSelectedSkills] = useState(new Set());
-  const onToggleCategory = (id) => {
-    setExpandedCategories(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
-  const onToggleSkill = (id) => {
-    setSelectedSkills(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
-  const onRemoveSkill = (id) => {
-    setSelectedSkills(prev => {
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
-  };
-
-  const selectedSkillObjects = SKILL_TREE.flatMap(cat =>
-    cat.skills
-      .filter(s => selectedSkills.has(s.id))
-      .map(s => ({ ...s, categoryColor: cat.color, categoryLabel: cat.label }))
-  );
-
-  return (
-    <div className="goals-layout">
-      {/* Skill tree */}
-      <div className="goals-tree-panel">
-        {SKILL_TREE.map(category => (
-          <CategoryBlock
-            key={category.id}
-            category={category}
-            expandedCategories={expandedCategories}
-            selectedSkills={selectedSkills}
-            onToggleCategory={onToggleCategory}
-            onToggleSkill={onToggleSkill}
-          />
-        ))}
-      </div>
-
-      {/* My Goals panel */}
-      <div className="goals-detail-panel">
-        {selectedSkillObjects.length === 0 ? (
-          <div className="goals-empty-state">
-            <svg width="32" height="32" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="8" r="6" stroke="#dcdcdc" strokeWidth="1.2" />
-              <circle cx="8" cy="8" r="3.5" stroke="#dcdcdc" strokeWidth="1.2" />
-              <circle cx="8" cy="8" r="1" fill="#dcdcdc" />
-            </svg>
-            <span>What are you working on?</span>
-            <span className="goals-empty-sub">Pick skills from the left to set your training focus</span>
-          </div>
-        ) : (
-          <div className="goals-detail-inner">
-            <div className="goals-my-goals-header">
-              <div className="goals-my-goals-title">My Goals</div>
-              <div className="goals-my-goals-sub">
-                {selectedSkillObjects.length > 4
-                  ? "Consider narrowing your focus — less is more"
-                  : "Your current training focus"}
-              </div>
-            </div>
-            <div className="goals-card-list">
-              {selectedSkillObjects.map(skill => (
-                <GoalCard
-                  key={skill.id}
-                  skill={skill}
-                  onRemove={onRemoveSkill}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
