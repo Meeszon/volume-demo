@@ -99,7 +99,8 @@ Goal state comes from `useGoals()` — no additional goal state lives in this pa
 
 ### Search
 - Filters: a node is visible if its label matches OR any descendant's label matches
-- When a search term is active, all matching branches auto-expand
+- When a search term is active, visibility is computed independently of `expandedIds` — matching branches render open regardless of manual state
+- When search clears, `expandedIds` resumes control of expansion
 
 ---
 
