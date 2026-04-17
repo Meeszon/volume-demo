@@ -31,6 +31,7 @@ export interface TreeBranch {
 export interface TreeLeaf {
   id: string;
   label: string;
+  description?: string;
   exercises: Exercise[];
 }
 

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { isLeaf, getAncestorIds, getTopLevelAreas } from "./tree";
-import type { TreeNode } from "../types";
+import type { TreeNode, TreeLeaf } from "../types";
 
 const MOCK_TREE: TreeNode[] = [
   {
@@ -62,5 +62,16 @@ describe("getTopLevelAreas", () => {
   });
   it("returns [] when tree is empty", () => {
     expect(getTopLevelAreas([])).toEqual([]);
+  });
+});
+
+describe("TreeLeaf description field", () => {
+  it("accepts optional description", () => {
+    const leaf: TreeLeaf = { id: "x", label: "X", description: "Test desc", exercises: [] };
+    expect(leaf.description).toBe("Test desc");
+  });
+  it("description is optional", () => {
+    const leaf: TreeLeaf = { id: "y", label: "Y", exercises: [] };
+    expect(leaf.description).toBeUndefined();
   });
 });
