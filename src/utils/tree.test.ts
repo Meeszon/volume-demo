@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { isLeaf, getAncestorIds, getTopLevelAreas } from "./tree";
-import type { TreeNode, TreeLeaf } from "../types";
+import { isLeaf, getAncestorIds, getTopLevelAreas, nodeMatchesSearch, getAutoExpandIds } from "./tree";
+import type { TreeNode, TreeLeaf, TreeBranch } from "../types";
 
 const MOCK_TREE: TreeNode[] = [
   {
@@ -62,6 +62,86 @@ describe("getTopLevelAreas", () => {
   });
   it("returns [] when tree is empty", () => {
     expect(getTopLevelAreas([])).toEqual([]);
+  });
+});
+
+describe("nodeMatchesSearch", () => {
+  it("returns true for a leaf whose label matches (case-insensitive)", () => {
+    const leaf: TreeLeaf = { id: "slopers", label: "Slopers", exercises: [] };
+    expect(nodeMatchesSearch(leaf, "SLOPE")).toBe(true);
+  });
+  it("returns false for a leaf with no matching label", () => {
+    const leaf: TreeLeaf = { id: "slopers", label: "Slopers", exercises: [] };
+    expect(nodeMatchesSearch(leaf, "crimp")).toBe(false);
+  });
+  it("returns true for a branch where a descendant leaf matches", () => {
+    const branch: TreeBranch = {
+      id: "hold-types",
+      label: "Hold Types",
+      children: [{ id: "slopers", label: "Slopers", exercises: [] }],
+    };
+    expect(nodeMatchesSearch(branch, "slope")).toBe(true);
+  });
+  it("returns false for a branch where no descendant matches", () => {
+    const branch: TreeBranch = {
+      id: "hold-types",
+      label: "Hold Types",
+      children: [{ id: "slopers", label: "Slopers", exercises: [] }],
+    };
+    expect(nodeMatchesSearch(branch, "cave")).toBe(false);
+  });
+  it("returns true when the branch label itself matches", () => {
+    const branch: TreeBranch = {
+      id: "hold-types",
+      label: "Hold Types",
+      children: [{ id: "slopers", label: "Slopers", exercises: [] }],
+    };
+    expect(nodeMatchesSearch(branch, "hold")).toBe(true);
+  });
+});
+
+const SEARCH_TREE: TreeNode[] = [
+  {
+    id: "hold-types",
+    label: "Hold Types",
+    children: [
+      { id: "slopers", label: "Slopers", exercises: [] },
+      { id: "crimps", label: "Crimps", exercises: [] },
+    ],
+  },
+  {
+    id: "wall-angles",
+    label: "Wall Angles",
+    children: [
+      {
+        id: "slab",
+        label: "Slab",
+        children: [{ id: "smearing", label: "Smearing", exercises: [] }],
+      },
+    ],
+  },
+];
+
+describe("getAutoExpandIds", () => {
+  it("returns empty set for empty query", () => {
+    expect(getAutoExpandIds(SEARCH_TREE, "").size).toBe(0);
+  });
+  it("returns branch ID whose child leaf matches", () => {
+    const ids = getAutoExpandIds(SEARCH_TREE, "slope");
+    expect(ids.has("hold-types")).toBe(true);
+  });
+  it("does not include leaf IDs in the result", () => {
+    const ids = getAutoExpandIds(SEARCH_TREE, "slope");
+    expect(ids.has("slopers")).toBe(false);
+  });
+  it("includes branch when branch label itself matches", () => {
+    const ids = getAutoExpandIds(SEARCH_TREE, "hold");
+    expect(ids.has("hold-types")).toBe(true);
+  });
+  it("expands deeply nested branches when a deep leaf matches", () => {
+    const ids = getAutoExpandIds(SEARCH_TREE, "smear");
+    expect(ids.has("wall-angles")).toBe(true);
+    expect(ids.has("slab")).toBe(true);
   });
 });
 
