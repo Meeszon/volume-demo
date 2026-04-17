@@ -10,7 +10,7 @@ import styles from "./Sidebar.module.css";
 const NAV_ITEMS = [
   { to: "/schedule", label: "Schedule", icon: <ScheduleIcon /> },
   { to: "/activities", label: "Activities", icon: <ActivitiesIcon /> },
-  { to: "/goals", label: "Goals", icon: <GoalsIcon /> },
+  { to: "/goals", label: "Skill Tree", icon: <GoalsIcon /> },
 ] as const;
 
 export function Sidebar() {
