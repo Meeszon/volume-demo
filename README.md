@@ -1,6 +1,6 @@
 # Volume
 
-A training planning app for climbers. In active development — transitioning from demo to a real product.
+A training planning app for climbers. In active development.
 
 ## What it is
 
@@ -41,14 +41,14 @@ npm run dev
 
 ## Scripts
 
-| Command            | What it does                        |
-|--------------------|-------------------------------------|
-| `npm run dev`      | Start dev server                    |
-| `npm run build`    | Production build                    |
-| `npm run typecheck`| TypeScript type check               |
-| `npm run lint`     | ESLint                              |
-| `npm run format`   | Prettier (formats `src/`)           |
-| `npm test`         | Run unit tests (Vitest)             |
+| Command             | What it does              |
+| ------------------- | ------------------------- |
+| `npm run dev`       | Start dev server          |
+| `npm run build`     | Production build          |
+| `npm run typecheck` | TypeScript type check     |
+| `npm run lint`      | ESLint                    |
+| `npm run format`    | Prettier (formats `src/`) |
+| `npm test`          | Run unit tests (Vitest)   |
 
 ## CI/CD
 
