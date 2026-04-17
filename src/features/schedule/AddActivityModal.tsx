@@ -99,15 +99,11 @@ export function AddActivityModal({
         <div className={styles.activityList}>
           {activeTab === "suggested" && (
             <>
-              {suggested.length === 0 ? (
-                <p className={styles.empty}>
-                  {hasSelections
-                    ? "No matching activities found."
-                    : "Set goals to see suggestions."}
-                </p>
-              ) : (
+              {hasSelections && suggested.length === 0 ? (
+                <p className={styles.empty}>No matching activities found.</p>
+              ) : hasSelections ? (
                 suggested.map((a) => renderActivityItem(a, true))
-              )}
+              ) : null}
             </>
           )}
 
