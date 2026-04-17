@@ -20,7 +20,7 @@ export function GoalsProvider({ children }: { children: React.ReactNode }) {
     const isFirst = goals.length === 0;
     setGoals((prev) => [
       ...prev,
-      { id: areaId, areaId, areaLabel, isPrimary: isFirst, selectedNodeIds: [] },
+      { id: areaId, areaId, areaLabel, isPrimary: isFirst, selectedNodeIds: [areaId] },
     ]);
   };
 
