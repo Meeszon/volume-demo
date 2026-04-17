@@ -21,7 +21,7 @@ export interface SelectedSkillV1 extends Skill {
   categoryLabel: string;
 }
 
-// Recursive skill tree (Goals v2)
+// Recursive skill tree
 export interface TreeBranch {
   id: string;
   label: string;
@@ -40,13 +40,28 @@ export interface SelectedSkillV2 extends TreeLeaf {
   ancestorPath: string[];
 }
 
+// Goals
+export interface GoalTag {
+  nodeId: string;
+  nodeLabel: string;
+}
+
+export interface Goal {
+  id: string;
+  areaId: string;
+  areaLabel: string;
+  isPrimary: boolean;
+  selectedNodeIds: string[];
+}
+
 // Schedule / kanban
 export interface Activity {
   id: string;
   title: string;
   subtitle: string;
-  grade: string;
+  grade?: string;
   accent: string;
+  goalTags?: GoalTag[];
 }
 
 export interface Day {
