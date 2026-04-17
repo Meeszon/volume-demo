@@ -23,138 +23,85 @@
   color: #413f39;
 }
 
-/* ── Goals layout ── */
+/* ── Tab bar ── */
 
-.layout {
+.tabBar {
   display: flex;
-  flex: 1;
-  min-height: 0;
-}
-
-/* ── Tree panel ── */
-
-.treePanel {
-  flex: 0 0 380px;
-  border-right: 1px solid #f0f0f0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #e0e0e0 transparent;
-}
-
-.treePanel::-webkit-scrollbar,
-.detailPanel::-webkit-scrollbar {
-  width: 5px;
-}
-
-.treePanel::-webkit-scrollbar-track,
-.detailPanel::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.treePanel::-webkit-scrollbar-thumb,
-.detailPanel::-webkit-scrollbar-thumb {
-  background-color: #e0e0e0;
-  border-radius: 9999px;
-}
-
-/* ── Category block ── */
-
-.categoryBlock {
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.categoryHeader {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 38px;
+  align-items: flex-end;
+  gap: 2px;
   padding: 0 20px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.categoryHeader:hover {
-  background-color: rgba(0, 0, 0, 0.02);
-}
-
-.categoryDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  border-bottom: 1px solid #f0f0f0;
   flex-shrink: 0;
 }
 
-.categoryLabel {
-  flex: 1;
-  font-size: 14px;
-  font-weight: bold;
-  color: #413f39;
-}
-
-.categoryCount {
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* ── Collapse wrapper ── */
-
-.categoryBodyWrapper {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.2s ease;
-}
-
-.categoryBodyWrapper.open {
-  max-height: 500px;
-}
-
-/* ── Skill chips ── */
-
-.categoryBody {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 10px 20px 14px 36px;
-}
-
-.skillChip {
+.tab {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  height: 26px;
-  padding: 0 10px;
-  border-radius: 4px;
-  border: 1px solid #dcdcdc;
-  background: white;
+  padding: 8px 12px 9px;
   font-size: 13px;
   font-family: Arial, Helvetica, sans-serif;
   color: #787878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
   cursor: pointer;
   user-select: none;
-  transition:
-    border-color 0.12s ease,
-    color 0.12s ease,
-    background-color 0.12s ease;
+  white-space: nowrap;
+  transition: color 0.12s ease;
 }
 
-.skillChip:hover {
-  border-color: #c0c0c0;
+.tab:hover { color: #413f39; }
+
+.tabActive {
   color: #413f39;
+  font-weight: 600;
+  border-bottom-color: #413f39;
 }
 
-.skillChip.selected {
-  color: white;
+.tabStar {
+  font-size: 13px;
+  color: #c8a84b;
+  cursor: pointer;
+  padding: 0 1px;
 }
 
-/* ── Detail panel ── */
+.tabStar:hover { color: #a07830; }
 
-.detailPanel {
+.tabRemove {
+  font-size: 15px;
+  color: #c4c3c0;
+  cursor: pointer;
+  padding: 0 1px;
+  line-height: 1;
+  margin-left: 2px;
+}
+
+.tabRemove:hover { color: #787878; }
+
+.tabAdd {
+  color: #9d9c99;
+  border: 1px dashed #dcdcdc;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  margin-left: 4px;
+  font-size: 12px;
+  padding: 6px 12px 7px;
+}
+
+.tabAdd:hover {
+  color: #413f39;
+  border-color: #b0afa9;
+}
+
+/* ── Tab content ── */
+
+.tabContent {
   flex: 1;
-  overflow-y: auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  scrollbar-width: thin;
-  scrollbar-color: #e0e0e0 transparent;
 }
 
 /* ── Empty state ── */
@@ -175,139 +122,23 @@
 .emptySub {
   font-size: 12px;
   color: #c4c3c0;
-  max-width: 200px;
+  max-width: 220px;
   line-height: 1.5;
 }
 
-/* ── My Goals panel ── */
-
-.detailInner {
-  display: flex;
-  flex-direction: column;
-  padding: 20px 24px;
-  flex: 1;
-}
-
-.myGoalsHeader {
-  margin-bottom: 4px;
-}
-
-.myGoalsTitle {
-  font-size: 16px;
-  font-weight: bold;
-  color: #413f39;
-  line-height: 1.2;
-  margin-bottom: 4px;
-}
-
-.myGoalsSub {
-  font-size: 12px;
-  color: #b0afa9;
-  margin-bottom: 16px;
-}
-
-/* ── Goal cards ── */
-
-.cardList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.goalCard {
-  background: white;
-  border: 1px solid #f0f0f0;
-  border-left-width: 3px;
+.emptyAddBtn {
+  margin-top: 8px;
+  padding: 8px 16px;
+  border: 1px solid #dcdcdc;
   border-radius: 4px;
-  padding: 13px 15px 12px;
-}
-
-.goalCardHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.goalCardMeta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.goalCardCategory {
-  font-size: 11px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.goalCardName {
-  font-size: 14px;
-  font-weight: bold;
-  color: #413f39;
-}
-
-.removeBtn {
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  line-height: 1;
-  color: #c4c3c0;
-  cursor: pointer;
-  padding: 0 2px;
-  font-family: Arial, Helvetica, sans-serif;
-  flex-shrink: 0;
-  margin-top: -1px;
-}
-
-.removeBtn:hover {
-  color: #787878;
-}
-
-/* ── Exercises toggle ── */
-
-.exercisesToggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 9px;
-  border: none;
-  background: transparent;
-  font-size: 12px;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #9d9c99;
-  cursor: pointer;
-  padding: 0;
-}
-
-.exercisesToggle:hover {
-  color: #787878;
-}
-
-/* ── Exercise list ── */
-
-.exercisesList {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 10px;
-  border-top: 1px solid #f0f0f0;
-}
-
-.exerciseItem {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.exerciseName {
+  background: white;
   font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
   color: #413f39;
+  cursor: pointer;
 }
 
-.exerciseDetail {
-  font-size: 12px;
-  color: #787878;
+.emptyAddBtn:hover {
+  border-color: #b0afa9;
+  background: #fafafa;
 }
