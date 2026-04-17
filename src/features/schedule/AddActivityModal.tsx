@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ACTIVITIES } from "../../data/activities";
 import { getSuggestedActivities } from "../../utils/suggestions";
 import { useGoals } from "../../contexts/GoalsContext";
-import { SKILL_TREE_V2 } from "../../data/skillTreeV2";
+import { SKILL_TREE } from "../../data/skillTree";
 import type { Activity } from "../../types";
 import styles from "./AddActivityModal.module.css";
 
@@ -22,7 +22,7 @@ export function AddActivityModal({
   const { goals } = useGoals();
   const [activeTab, setActiveTab] = useState<TabId>("suggested");
 
-  const suggested = getSuggestedActivities(goals, ACTIVITIES, SKILL_TREE_V2);
+  const suggested = getSuggestedActivities(goals, ACTIVITIES, SKILL_TREE);
   const hasSelections = goals.some((g) => g.selectedNodeIds.length > 0);
 
   const byCategory = ACTIVITIES.reduce<Record<string, Activity[]>>(
@@ -92,7 +92,7 @@ export function AddActivityModal({
 
         {activeTab === "suggested" && !hasSelections && (
           <p className={styles.noGoalsHint}>
-            Select sub-skills on the Goals page to see suggestions here.
+            Set goals from the Skill Tree page to see suggestions here.
           </p>
         )}
 
