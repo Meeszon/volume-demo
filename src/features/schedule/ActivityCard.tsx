@@ -18,9 +18,6 @@ export function ActivityCard({ task, provided, snapshot }: ActivityCardProps) {
       className={`${styles.activityCard}${snapshot.isDragging ? ` ${styles.dragging}` : ""}`}
       style={provided.draggableProps.style}
     >
-      <div className={styles.cardImage}>
-        <ImagePlaceholderIcon />
-      </div>
       <div className={styles.cardSeparator} style={{ backgroundColor: task.accent }} />
       <div className={styles.cardText}>
         <span className={styles.cardTitle}>{task.title}</span>
