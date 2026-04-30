@@ -31,10 +31,6 @@ export function AddActivityModal({
   const [selectedCategory, setSelectedCategory] = useState<ActivityType | null>(null);
   const [customText, setCustomText] = useState("");
 
-  const handleSelectCategory = (type: ActivityType) => {
-    setSelectedCategory(type);
-  };
-
   const handleBack = () => {
     setSelectedCategory(null);
     setCustomText("");
@@ -58,7 +54,7 @@ export function AddActivityModal({
           key={cat.type}
           className={styles.categoryBtn}
           style={{ borderColor: TYPE_COLORS[cat.type] }}
-          onClick={() => handleSelectCategory(cat.type)}
+          onClick={() => setSelectedCategory(cat.type)}
         >
           <span
             className={styles.categoryDot}
@@ -70,7 +66,7 @@ export function AddActivityModal({
     </div>
   );
 
-  const renderTemplateList = (category: ActivityCategory) => {
+  const renderTemplateList = (category: ActivityCategory, showCustomInput: boolean) => {
     const templates = getTemplatesByCategory(category);
     return (
       <div className={styles.activityList}>
@@ -94,49 +90,23 @@ export function AddActivityModal({
             </div>
           </button>
         ))}
-        <div className={styles.customRow}>
-          <input
-            className={styles.customInput}
-            type="text"
-            placeholder="Custom activity name"
-            value={customText}
-            onChange={(e) => setCustomText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleCustomSubmit();
-            }}
-          />
-          <button className={styles.customAddBtn} onClick={handleCustomSubmit}>
-            Add
-          </button>
-        </div>
-      </div>
-    );
-  };
-
-  const renderWarmup = () => {
-    const templates = getTemplatesByCategory("warmup");
-    return (
-      <div className={styles.activityList}>
-        {templates.map((t) => (
-          <button
-            key={t.name}
-            className={styles.templateItem}
-            onClick={() => handleAdd("warmup", t.name)}
-          >
-            <span
-              className={styles.activityAccent}
-              style={{ backgroundColor: TYPE_COLORS.warmup }}
+        {showCustomInput && (
+          <div className={styles.customRow}>
+            <input
+              className={styles.customInput}
+              type="text"
+              placeholder="Custom activity name"
+              value={customText}
+              onChange={(e) => setCustomText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleCustomSubmit();
+              }}
             />
-            <div className={styles.templateText}>
-              <span className={styles.activityTitle}>{t.name}</span>
-              {t.exercises && (
-                <span className={styles.exerciseList}>
-                  {t.exercises.join(", ")}
-                </span>
-              )}
-            </div>
-          </button>
-        ))}
+            <button className={styles.customAddBtn} onClick={handleCustomSubmit}>
+              Add
+            </button>
+          </div>
+        )}
       </div>
     );
   };
@@ -153,9 +123,9 @@ export function AddActivityModal({
     switch (selectedCategory) {
       case "conditioning":
       case "mobility":
-        return renderTemplateList(selectedCategory);
+        return renderTemplateList(selectedCategory, true);
       case "warmup":
-        return renderWarmup();
+        return renderTemplateList("warmup", false);
       case "climbing":
         return renderClimbing();
       default:

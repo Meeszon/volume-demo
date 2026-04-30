@@ -181,7 +181,7 @@ describe("AddActivityModal", () => {
       expect(screen.getByText(/Split Squats/)).toBeTruthy();
     });
 
-    it("clicking General Warm Up adds it to Supabase", async () => {
+    it("clicking General Warm Up calls onAdd with warmup type", async () => {
       const user = await goToWarmup();
 
       await user.click(screen.getByText("General Warm Up"));
