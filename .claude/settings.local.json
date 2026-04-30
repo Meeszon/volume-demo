@@ -31,7 +31,8 @@
       "Bash(curl -sL \"https://api.anthropic.com/v1/design/h/vqf1_RstEDRHyGZ7x2sVYQ\")",
       "Bash(gunzip)",
       "Bash(tar -xz -C /tmp/design_bundle)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(git config *)"
     ]
   }
 }
