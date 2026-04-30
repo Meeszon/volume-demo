@@ -1,15 +1,20 @@
+import { useState } from "react";
 import type { DraggableProvided, DraggableStateSnapshot } from "@hello-pangea/dnd";
 import type { Activity } from "../../types";
-import { ImagePlaceholderIcon, CheckCircleIcon } from "../../components/icons";
+import { TrashIcon } from "../../components/icons";
 import styles from "./schedule.module.css";
 
 interface ActivityCardProps {
   task: Activity;
   provided: DraggableProvided;
   snapshot: DraggableStateSnapshot;
+  dayId: string;
+  onDelete: (dayId: string, activityId: string) => void;
 }
 
-export function ActivityCard({ task, provided, snapshot }: ActivityCardProps) {
+export function ActivityCard({ task, provided, snapshot, dayId, onDelete }: ActivityCardProps) {
+  const [confirming, setConfirming] = useState(false);
+
   return (
     <div
       ref={provided.innerRef}
@@ -25,7 +30,32 @@ export function ActivityCard({ task, provided, snapshot }: ActivityCardProps) {
         {task.grade && <span className={styles.cardGrade}>{task.grade}</span>}
       </div>
       <div className={styles.cardMenu}>
-        <CheckCircleIcon />
+        {confirming ? (
+          <div className={styles.confirmDelete}>
+            <button
+              className={styles.confirmBtn}
+              aria-label="Confirm delete"
+              onClick={() => onDelete(dayId, task.id)}
+            >
+              Delete
+            </button>
+            <button
+              className={styles.cancelBtn}
+              aria-label="Cancel delete"
+              onClick={() => setConfirming(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            className={styles.deleteBtn}
+            aria-label="Delete activity"
+            onClick={() => setConfirming(true)}
+          >
+            <TrashIcon />
+          </button>
+        )}
       </div>
     </div>
   );
