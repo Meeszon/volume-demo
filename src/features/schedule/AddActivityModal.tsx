@@ -1,8 +1,7 @@
 import { useState, useMemo } from "react";
 import { getTemplatesByCategory } from "../../data/activityTemplates";
-import { getIntentOptions } from "../../data/skillTree";
+import { getIntentOptions, type IntentOption } from "../../data/skillTree";
 import type { ActivityType, ActivityCategory } from "../../types";
-import type { IntentOption } from "../../data/skillTree";
 import styles from "./AddActivityModal.module.css";
 
 interface AddActivityModalProps {
@@ -35,16 +34,16 @@ export function AddActivityModal({
   const [selectedIntentId, setSelectedIntentId] = useState<string | null>(null);
   const [durationText, setDurationText] = useState("");
 
-  const intentOptions = useMemo(() => getIntentOptions(), []);
-  const groupedIntents = useMemo(() => {
+  const { intentOptions, groupedIntents } = useMemo(() => {
+    const options = getIntentOptions();
     const grouped = new Map<string, IntentOption[]>();
-    for (const opt of intentOptions) {
+    for (const opt of options) {
       const list = grouped.get(opt.categoryLabel) ?? [];
       list.push(opt);
       grouped.set(opt.categoryLabel, list);
     }
-    return grouped;
-  }, [intentOptions]);
+    return { intentOptions: options, groupedIntents: grouped };
+  }, []);
 
   const handleBack = () => {
     setSelectedCategory(null);
@@ -131,7 +130,7 @@ export function AddActivityModal({
   const handleClimbingSubmit = () => {
     if (!selectedIntentId) return;
     const duration = parseInt(durationText, 10);
-    if (!duration || duration <= 0) return;
+    if (!(duration > 0)) return;
     const selected = intentOptions.find((o) => o.id === selectedIntentId);
     if (!selected) return;
     onAdd("climbing", selected.label, selected.id, duration);

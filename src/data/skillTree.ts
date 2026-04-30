@@ -18,17 +18,6 @@ export function getIntentOptions(): IntentOption[] {
   return options;
 }
 
-export function getIntentLabel(nodeId: string): string | null {
-  for (const node of SKILL_TREE) {
-    if ("children" in node) {
-      for (const child of node.children) {
-        if (child.id === nodeId) return child.label;
-      }
-    }
-  }
-  return null;
-}
-
 export const CATEGORY_COLORS: Record<string, string> = {
   "technique": "#F5A623",
   "flexibility-mobility": "#EF4E8B",
