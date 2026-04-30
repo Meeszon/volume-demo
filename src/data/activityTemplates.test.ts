@@ -3,7 +3,6 @@ import {
   ACTIVITY_TEMPLATES,
   getTemplatesByCategory,
 } from "./activityTemplates";
-import type { ActivityTemplate } from "../types";
 
 describe("ACTIVITY_TEMPLATES", () => {
   it("every template has a name, category, and exercises is either undefined or an array", () => {
@@ -12,7 +11,7 @@ describe("ACTIVITY_TEMPLATES", () => {
       expect(["conditioning", "mobility", "warmup"]).toContain(t.category);
       if (t.exercises !== undefined) {
         expect(Array.isArray(t.exercises)).toBe(true);
-        expect(t.exercises!.length).toBeGreaterThan(0);
+        expect(t.exercises.length).toBeGreaterThan(0);
       }
     }
   });
