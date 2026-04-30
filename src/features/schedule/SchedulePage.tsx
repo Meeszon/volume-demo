@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import type { DropResult } from "@hello-pangea/dnd";
-import { initialData } from "../../data/schedule";
-import type { Activity, Columns } from "../../types";
 import { getMonday, getWeekDays, shiftWeek, formatWeekLabel, isCurrentWeek } from "../../utils/weekDates";
+import { useWeekActivities } from "../../hooks/useWeekActivities";
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "../../components/icons";
 import { ActivityCard } from "./ActivityCard";
 import { AddActivityModal } from "./AddActivityModal";
 import styles from "./schedule.module.css";
 
 export function SchedulePage() {
-  const [columns, setColumns] = useState<Columns>(initialData);
   const [modalDayId, setModalDayId] = useState<string | null>(null);
   const [weekMonday, setWeekMonday] = useState(() => getMonday(new Date()));
+
+  const { columns, loading, error, addActivity, handleDragEnd } =
+    useWeekActivities(weekMonday);
 
   const days = useMemo(() => getWeekDays(weekMonday), [weekMonday]);
   const weekLabel = useMemo(() => formatWeekLabel(weekMonday), [weekMonday]);
@@ -54,41 +54,12 @@ export function SchedulePage() {
     boardRef.current.scrollLeft = scrollDrag.current.scrollLeft - dx;
   };
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-    const { source, destination } = result;
-    if (source.droppableId === destination.droppableId && source.index === destination.index)
-      return;
-
-    const sourceCol = source.droppableId;
-    const destCol = destination.droppableId;
-    const newColumns = { ...columns };
-    const sourceTasks = [...newColumns[sourceCol]];
-    const destTasks = sourceCol === destCol ? sourceTasks : [...newColumns[destCol]];
-
-    const [movedTask] = sourceTasks.splice(source.index, 1);
-    destTasks.splice(destination.index, 0, movedTask);
-
-    newColumns[sourceCol] = sourceTasks;
-    newColumns[destCol] = destTasks;
-    setColumns(newColumns);
-  };
-
-  const handleAddActivity = (dayId: string, activity: Activity) => {
-    setColumns((prev) => ({
-      ...prev,
-      [dayId]: [
-        ...prev[dayId],
-        { ...activity, id: `${activity.id}-${Date.now()}` },
-      ],
-    }));
-  };
-
   const modalDay = modalDayId ? days.find((d) => d.id === modalDayId) : null;
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
+        {error && <span className={styles.errorBanner}>{error}</span>}
         <div className={styles.weekPicker}>
           <button className={styles.weekPickerBtn} onClick={goToPrevWeek}>
             <ChevronLeftIcon />
@@ -108,7 +79,7 @@ export function SchedulePage() {
         </div>
       </header>
 
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={handleDragEnd}>
         <div
           className={styles.boardScroll}
           ref={boardRef}
@@ -133,7 +104,7 @@ export function SchedulePage() {
                       {...provided.droppableProps}
                       className={`${styles.cardList}${snapshot.isDraggingOver ? ` ${styles.cardListDragOver}` : ""}`}
                     >
-                      {columns[day.id].map((task, index) => (
+                      {loading ? null : (columns[day.id] ?? []).map((task, index) => (
                         <Draggable key={task.id} draggableId={task.id} index={index}>
                           {(provided, snapshot) => (
                             <ActivityCard task={task} provided={provided} snapshot={snapshot} />
@@ -153,7 +124,9 @@ export function SchedulePage() {
         <AddActivityModal
           dayLabel={`${modalDay.id} ${modalDay.date}`}
           onClose={() => setModalDayId(null)}
-          onAdd={(activity) => handleAddActivity(modalDay.id, activity)}
+          onAdd={(activity) => {
+            addActivity(modalDay.id, "conditioning", activity.title);
+          }}
         />
       )}
     </div>

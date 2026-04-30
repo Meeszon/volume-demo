@@ -72,6 +72,21 @@ export interface Day {
 
 export type Columns = Record<string, Activity[]>;
 
+// Supabase activity row
+export type ActivityType = "climbing" | "conditioning" | "mobility" | "warmup";
+
+export interface DbActivity {
+  id: string;
+  user_id: string;
+  scheduled_date: string;
+  type: ActivityType;
+  title: string;
+  intent_node_id: string | null;
+  duration_minutes: number | null;
+  order: number;
+  created_at: string;
+}
+
 // Activity templates
 export type ActivityCategory = "conditioning" | "mobility" | "warmup";
 
