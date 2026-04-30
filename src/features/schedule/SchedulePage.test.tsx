@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 const mockUseWeekActivities = vi.hoisted(() => vi.fn());
 
@@ -89,5 +90,65 @@ describe("SchedulePage", () => {
     render(<SchedulePage />);
 
     expect(screen.queryByText("Rest Day")).toBeNull();
+  });
+
+  describe("AddActivityModal integration", () => {
+    let mockAddActivity: ReturnType<typeof vi.fn>;
+
+    beforeEach(() => {
+      mockAddActivity = vi.fn();
+      mockUseWeekActivities.mockReturnValue({
+        columns: EMPTY_COLUMNS,
+        loading: false,
+        error: null,
+        addActivity: mockAddActivity,
+        deleteActivity: vi.fn(),
+        handleDragEnd: vi.fn(),
+      });
+    });
+
+    it("opens modal when clicking Add Activity button", async () => {
+      const user = userEvent.setup();
+      render(<SchedulePage />);
+
+      const addButtons = screen.getAllByText("Add Activity");
+      await user.click(addButtons[0]);
+
+      expect(screen.getByTestId("modal-overlay")).toBeTruthy();
+      expect(screen.getByText(/Add Activity —/)).toBeTruthy();
+    });
+
+    it("completing modal flow calls addActivity and closes modal", async () => {
+      const user = userEvent.setup();
+      render(<SchedulePage />);
+
+      const addButtons = screen.getAllByText("Add Activity");
+      await user.click(addButtons[0]);
+
+      await user.click(screen.getByRole("button", { name: /conditioning/i }));
+      await user.click(screen.getByText("Weighted Pull Ups"));
+
+      expect(mockAddActivity).toHaveBeenCalledWith(
+        expect.any(String),
+        "conditioning",
+        "Weighted Pull Ups",
+        undefined,
+        undefined,
+      );
+      expect(screen.queryByTestId("modal-overlay")).toBeNull();
+    });
+
+    it("closes modal when clicking overlay", async () => {
+      const user = userEvent.setup();
+      render(<SchedulePage />);
+
+      const addButtons = screen.getAllByText("Add Activity");
+      await user.click(addButtons[0]);
+      expect(screen.getByTestId("modal-overlay")).toBeTruthy();
+
+      await user.click(screen.getByTestId("modal-overlay"));
+
+      expect(screen.queryByTestId("modal-overlay")).toBeNull();
+    });
   });
 });
