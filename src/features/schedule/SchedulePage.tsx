@@ -98,24 +98,28 @@ export function SchedulePage() {
                   <span className={styles.addActivityLabel}>Add Activity</span>
                 </button>
                 <Droppable droppableId={day.id}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className={`${styles.cardList}${snapshot.isDraggingOver ? ` ${styles.cardListDragOver}` : ""}`}
-                    >
-                      {loading ? null : (columns[day.id] ?? []).length === 0 ? (
-                        <div className={styles.restDay}>Rest Day</div>
-                      ) : (columns[day.id] ?? []).map((task, index) => (
-                        <Draggable key={task.id} draggableId={task.id} index={index}>
-                          {(provided, snapshot) => (
-                            <ActivityCard task={task} provided={provided} snapshot={snapshot} dayId={day.id} onDelete={deleteActivity} />
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
+                  {(provided, snapshot) => {
+                    const dayActivities = columns[day.id] ?? [];
+                    return (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`${styles.cardList}${snapshot.isDraggingOver ? ` ${styles.cardListDragOver}` : ""}`}
+                      >
+                        {!loading && dayActivities.length === 0 && (
+                          <div className={styles.restDay}>Rest Day</div>
+                        )}
+                        {!loading && dayActivities.map((task, index) => (
+                          <Draggable key={task.id} draggableId={task.id} index={index}>
+                            {(provided, snapshot) => (
+                              <ActivityCard task={task} provided={provided} snapshot={snapshot} dayId={day.id} onDelete={deleteActivity} />
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    );
+                  }}
                 </Droppable>
               </div>
             ))}
