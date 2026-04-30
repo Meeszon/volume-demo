@@ -136,6 +136,21 @@ describe("useWeekActivities", () => {
     );
   });
 
+  it("sorts activities by order field, not fetch order", async () => {
+    const activities = [
+      makeDbActivity({ id: "a2", scheduled_date: "2026-04-27", title: "Deadlift", order: 1 }),
+      makeDbActivity({ id: "a1", scheduled_date: "2026-04-27", title: "Pull Ups", order: 0 }),
+    ];
+    mockFetchActivities.mockResolvedValue(activities);
+
+    const { result } = renderHook(() => useWeekActivities(monday));
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.columns.Monday[0].title).toBe("Pull Ups");
+    expect(result.current.columns.Monday[1].title).toBe("Deadlift");
+  });
+
   describe("addActivity", () => {
     it("optimistically adds activity to the correct day", async () => {
       mockFetchActivities.mockResolvedValue([]);
@@ -294,6 +309,154 @@ describe("useWeekActivities", () => {
 
       expect(mockUpdateActivityOrders).not.toHaveBeenCalled();
       expect(mockMoveActivity).not.toHaveBeenCalled();
+    });
+
+    it("no-ops when dropped at same position", async () => {
+      const activities = [
+        makeDbActivity({ id: "a1", scheduled_date: "2026-04-27", title: "Pull Ups", order: 0 }),
+        makeDbActivity({ id: "a2", scheduled_date: "2026-04-27", title: "Deadlift", order: 1 }),
+      ];
+      mockFetchActivities.mockResolvedValue(activities);
+
+      const { result } = renderHook(() => useWeekActivities(monday));
+      await waitFor(() => expect(result.current.loading).toBe(false));
+
+      await act(async () => {
+        await result.current.handleDragEnd({
+          source: { droppableId: "Monday", index: 0 },
+          destination: { droppableId: "Monday", index: 0 },
+        } as never);
+      });
+
+      expect(mockUpdateActivityOrders).not.toHaveBeenCalled();
+      expect(mockMoveActivity).not.toHaveBeenCalled();
+    });
+
+    it("sends correct order values for same-day reorder", async () => {
+      const activities = [
+        makeDbActivity({ id: "a1", scheduled_date: "2026-04-27", title: "Pull Ups", order: 0 }),
+        makeDbActivity({ id: "a2", scheduled_date: "2026-04-27", title: "Deadlift", order: 1 }),
+        makeDbActivity({ id: "a3", scheduled_date: "2026-04-27", title: "Bench", order: 2 }),
+      ];
+      mockFetchActivities.mockResolvedValue(activities);
+
+      const { result } = renderHook(() => useWeekActivities(monday));
+      await waitFor(() => expect(result.current.loading).toBe(false));
+
+      await act(async () => {
+        await result.current.handleDragEnd({
+          source: { droppableId: "Monday", index: 0 },
+          destination: { droppableId: "Monday", index: 2 },
+        } as never);
+      });
+
+      expect(mockUpdateActivityOrders).toHaveBeenCalledWith([
+        { id: "a2", order: 0 },
+        { id: "a3", order: 1 },
+        { id: "a1", order: 2 },
+      ]);
+    });
+
+    it("updates orders in both days on cross-day move", async () => {
+      const activities = [
+        makeDbActivity({ id: "a1", scheduled_date: "2026-04-27", title: "Pull Ups", order: 0 }),
+        makeDbActivity({ id: "a2", scheduled_date: "2026-04-27", title: "Deadlift", order: 1 }),
+        makeDbActivity({ id: "a3", scheduled_date: "2026-04-29", title: "Yoga", type: "mobility", order: 0 }),
+        makeDbActivity({ id: "a4", scheduled_date: "2026-04-29", title: "Stretch", type: "mobility", order: 1 }),
+      ];
+      mockFetchActivities.mockResolvedValue(activities);
+
+      const { result } = renderHook(() => useWeekActivities(monday));
+      await waitFor(() => expect(result.current.loading).toBe(false));
+
+      await act(async () => {
+        await result.current.handleDragEnd({
+          source: { droppableId: "Monday", index: 0 },
+          destination: { droppableId: "Wednesday", index: 1 },
+        } as never);
+      });
+
+      expect(result.current.columns.Monday).toHaveLength(1);
+      expect(result.current.columns.Monday[0].title).toBe("Deadlift");
+      expect(result.current.columns.Wednesday).toHaveLength(3);
+      expect(result.current.columns.Wednesday[0].title).toBe("Yoga");
+      expect(result.current.columns.Wednesday[1].title).toBe("Pull Ups");
+      expect(result.current.columns.Wednesday[2].title).toBe("Stretch");
+
+      expect(mockMoveActivity).toHaveBeenCalledWith("a1", "2026-04-29", 1);
+      expect(mockUpdateActivityOrders).toHaveBeenCalledWith([
+        { id: "a2", order: 0 },
+        { id: "a3", order: 0 },
+        { id: "a4", order: 2 },
+      ]);
+    });
+
+    it("reverts same-day reorder on API error", async () => {
+      const activities = [
+        makeDbActivity({ id: "a1", scheduled_date: "2026-04-27", title: "Pull Ups", order: 0 }),
+        makeDbActivity({ id: "a2", scheduled_date: "2026-04-27", title: "Deadlift", order: 1 }),
+      ];
+      mockFetchActivities.mockResolvedValue(activities);
+      mockUpdateActivityOrders.mockRejectedValue(new Error("order update failed"));
+
+      const { result } = renderHook(() => useWeekActivities(monday));
+      await waitFor(() => expect(result.current.loading).toBe(false));
+
+      await act(async () => {
+        await result.current.handleDragEnd({
+          source: { droppableId: "Monday", index: 0 },
+          destination: { droppableId: "Monday", index: 1 },
+        } as never);
+      });
+
+      expect(result.current.columns.Monday[0].title).toBe("Pull Ups");
+      expect(result.current.columns.Monday[1].title).toBe("Deadlift");
+      expect(result.current.error).toBe("Failed to move activity");
+    });
+
+    it("reverts cross-day move on API error", async () => {
+      const activities = [
+        makeDbActivity({ id: "a1", scheduled_date: "2026-04-27", title: "Pull Ups", order: 0 }),
+      ];
+      mockFetchActivities.mockResolvedValue(activities);
+      mockMoveActivity.mockRejectedValue(new Error("move failed"));
+
+      const { result } = renderHook(() => useWeekActivities(monday));
+      await waitFor(() => expect(result.current.loading).toBe(false));
+
+      await act(async () => {
+        await result.current.handleDragEnd({
+          source: { droppableId: "Monday", index: 0 },
+          destination: { droppableId: "Wednesday", index: 0 },
+        } as never);
+      });
+
+      expect(result.current.columns.Monday).toHaveLength(1);
+      expect(result.current.columns.Monday[0].title).toBe("Pull Ups");
+      expect(result.current.columns.Wednesday).toHaveLength(0);
+      expect(result.current.error).toBe("Failed to move activity");
+    });
+
+    it("updates UI optimistically before API resolves", async () => {
+      const activities = [
+        makeDbActivity({ id: "a1", scheduled_date: "2026-04-27", title: "Pull Ups", order: 0 }),
+        makeDbActivity({ id: "a2", scheduled_date: "2026-04-27", title: "Deadlift", order: 1 }),
+      ];
+      mockFetchActivities.mockResolvedValue(activities);
+      mockUpdateActivityOrders.mockImplementation(() => new Promise(() => {}));
+
+      const { result } = renderHook(() => useWeekActivities(monday));
+      await waitFor(() => expect(result.current.loading).toBe(false));
+
+      act(() => {
+        result.current.handleDragEnd({
+          source: { droppableId: "Monday", index: 0 },
+          destination: { droppableId: "Monday", index: 1 },
+        } as never);
+      });
+
+      expect(result.current.columns.Monday[0].title).toBe("Deadlift");
+      expect(result.current.columns.Monday[1].title).toBe("Pull Ups");
     });
   });
 });
