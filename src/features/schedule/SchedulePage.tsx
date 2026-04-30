@@ -104,7 +104,9 @@ export function SchedulePage() {
                       {...provided.droppableProps}
                       className={`${styles.cardList}${snapshot.isDraggingOver ? ` ${styles.cardListDragOver}` : ""}`}
                     >
-                      {loading ? null : (columns[day.id] ?? []).map((task, index) => (
+                      {loading ? null : (columns[day.id] ?? []).length === 0 ? (
+                        <div className={styles.restDay}>Rest Day</div>
+                      ) : (columns[day.id] ?? []).map((task, index) => (
                         <Draggable key={task.id} draggableId={task.id} index={index}>
                           {(provided, snapshot) => (
                             <ActivityCard task={task} provided={provided} snapshot={snapshot} dayId={day.id} onDelete={deleteActivity} />
