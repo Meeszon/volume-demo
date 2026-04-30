@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { DraggableProvided, DraggableStateSnapshot } from "@hello-pangea/dnd";
 import type { Activity } from "../../types";
-import { CheckCircleIcon, TrashIcon } from "../../components/icons";
+import { TrashIcon } from "../../components/icons";
 import styles from "./schedule.module.css";
 
 interface ActivityCardProps {
