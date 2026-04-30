@@ -15,11 +15,11 @@ export function LoginPage() {
     setSending(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithOtp({ email });
+    const { error: signInError } = await supabase.auth.signInWithOtp({ email });
 
     setSending(false);
-    if (error) {
-      setError(error.message);
+    if (signInError) {
+      setError(signInError.message);
     } else {
       setSent(true);
     }

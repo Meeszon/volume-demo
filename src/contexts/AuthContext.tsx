@@ -22,15 +22,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
+  async function signOut() {
+    await supabase.auth.signOut();
+  }
+
   return (
-    <AuthContext.Provider value={{ session, loading, signOut: () => supabase.auth.signOut().then(() => {}) }}>
+    <AuthContext.Provider value={{ session, loading, signOut }}>
       {children}
     </AuthContext.Provider>
   );
