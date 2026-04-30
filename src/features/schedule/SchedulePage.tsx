@@ -124,8 +124,8 @@ export function SchedulePage() {
         <AddActivityModal
           dayLabel={`${modalDay.id} ${modalDay.date}`}
           onClose={() => setModalDayId(null)}
-          onAdd={(type, title) => {
-            addActivity(modalDay.id, type, title);
+          onAdd={(type, title, intentNodeId, durationMinutes) => {
+            addActivity(modalDay.id, type, title, intentNodeId, durationMinutes);
           }}
         />
       )}

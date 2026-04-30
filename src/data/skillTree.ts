@@ -1,5 +1,34 @@
 import type { TreeNode } from "../types";
 
+export interface IntentOption {
+  id: string;
+  label: string;
+  categoryLabel: string;
+}
+
+export function getIntentOptions(): IntentOption[] {
+  const options: IntentOption[] = [];
+  for (const node of SKILL_TREE) {
+    if ("children" in node) {
+      for (const child of node.children) {
+        options.push({ id: child.id, label: child.label, categoryLabel: node.label });
+      }
+    }
+  }
+  return options;
+}
+
+export function getIntentLabel(nodeId: string): string | null {
+  for (const node of SKILL_TREE) {
+    if ("children" in node) {
+      for (const child of node.children) {
+        if (child.id === nodeId) return child.label;
+      }
+    }
+  }
+  return null;
+}
+
 export const CATEGORY_COLORS: Record<string, string> = {
   "technique": "#F5A623",
   "flexibility-mobility": "#EF4E8B",

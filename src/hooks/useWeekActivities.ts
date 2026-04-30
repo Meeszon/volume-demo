@@ -123,7 +123,7 @@ export function useWeekActivities(weekMonday: Date) {
   );
 
   const addActivity = useCallback(
-    async (dayId: string, type: ActivityType, title: string) => {
+    async (dayId: string, type: ActivityType, title: string, intentNodeId?: string, durationMinutes?: number) => {
       const userId = session?.user?.id;
       if (!userId) return;
 
@@ -140,8 +140,8 @@ export function useWeekActivities(weekMonday: Date) {
         scheduled_date: scheduledDate,
         type,
         title,
-        intent_node_id: null,
-        duration_minutes: null,
+        intent_node_id: intentNodeId ?? null,
+        duration_minutes: durationMinutes ?? null,
         order,
         created_at: new Date().toISOString(),
       };
@@ -154,8 +154,8 @@ export function useWeekActivities(weekMonday: Date) {
           scheduled_date: scheduledDate,
           type,
           title,
-          intent_node_id: null,
-          duration_minutes: null,
+          intent_node_id: intentNodeId ?? null,
+          duration_minutes: durationMinutes ?? null,
           order,
         });
         setDbActivities((prev) =>

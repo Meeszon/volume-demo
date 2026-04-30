@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { getTemplatesByCategory } from "../../data/activityTemplates";
+import { getIntentOptions } from "../../data/skillTree";
 import type { ActivityType, ActivityCategory } from "../../types";
+import type { IntentOption } from "../../data/skillTree";
 import styles from "./AddActivityModal.module.css";
 
 interface AddActivityModalProps {
   dayLabel: string;
   onClose: () => void;
-  onAdd: (type: ActivityType, title: string) => void;
+  onAdd: (type: ActivityType, title: string, intentNodeId?: string, durationMinutes?: number) => void;
 }
 
 const CATEGORIES: Array<{ type: ActivityType; label: string }> = [
@@ -30,10 +32,25 @@ export function AddActivityModal({
 }: AddActivityModalProps) {
   const [selectedCategory, setSelectedCategory] = useState<ActivityType | null>(null);
   const [customText, setCustomText] = useState("");
+  const [selectedIntentId, setSelectedIntentId] = useState<string | null>(null);
+  const [durationText, setDurationText] = useState("");
+
+  const intentOptions = useMemo(() => getIntentOptions(), []);
+  const groupedIntents = useMemo(() => {
+    const grouped = new Map<string, IntentOption[]>();
+    for (const opt of intentOptions) {
+      const list = grouped.get(opt.categoryLabel) ?? [];
+      list.push(opt);
+      grouped.set(opt.categoryLabel, list);
+    }
+    return grouped;
+  }, [intentOptions]);
 
   const handleBack = () => {
     setSelectedCategory(null);
     setCustomText("");
+    setSelectedIntentId(null);
+    setDurationText("");
   };
 
   const handleAdd = (type: ActivityType, title: string) => {
@@ -111,11 +128,62 @@ export function AddActivityModal({
     );
   };
 
+  const handleClimbingSubmit = () => {
+    if (!selectedIntentId) return;
+    const duration = parseInt(durationText, 10);
+    if (!duration || duration <= 0) return;
+    const selected = intentOptions.find((o) => o.id === selectedIntentId);
+    if (!selected) return;
+    onAdd("climbing", selected.label, selected.id, duration);
+    onClose();
+  };
+
   const renderClimbing = () => (
-    <div className={styles.placeholder}>
-      <p className={styles.placeholderText}>
-        Climbing session form coming soon.
-      </p>
+    <div className={styles.climbingForm}>
+      <div className={styles.intentSection}>
+        <label className={styles.fieldLabel}>Intent</label>
+        <div className={styles.intentList}>
+          {Array.from(groupedIntents.entries()).map(([category, options]) => (
+            <div key={category} className={styles.intentGroup}>
+              <span className={styles.intentCategory}>{category}</span>
+              <div className={styles.intentOptions}>
+                {options.map((opt) => (
+                  <button
+                    key={opt.id}
+                    className={`${styles.intentOption}${selectedIntentId === opt.id ? ` ${styles.intentSelected}` : ""}`}
+                    aria-pressed={selectedIntentId === opt.id}
+                    onClick={() => setSelectedIntentId(opt.id)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className={styles.durationSection}>
+        <label className={styles.fieldLabel} htmlFor="climbing-duration">
+          Duration (minutes)
+        </label>
+        <input
+          id="climbing-duration"
+          className={styles.durationInput}
+          type="number"
+          min="1"
+          placeholder="e.g. 90"
+          value={durationText}
+          onChange={(e) => setDurationText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleClimbingSubmit();
+          }}
+        />
+      </div>
+      <div className={styles.submitRow}>
+        <button className={styles.submitBtn} onClick={handleClimbingSubmit}>
+          Add Climbing Session
+        </button>
+      </div>
     </div>
   );
 

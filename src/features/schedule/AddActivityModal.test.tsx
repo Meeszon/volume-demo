@@ -191,6 +191,101 @@ describe("AddActivityModal", () => {
     });
   });
 
+  describe("Step 2: Climbing Session", () => {
+    async function goToClimbing() {
+      const user = userEvent.setup();
+      renderModal();
+      await user.click(screen.getByRole("button", { name: /climbing session/i }));
+      return user;
+    }
+
+    it("shows intent picker with skill tree categories", async () => {
+      await goToClimbing();
+
+      expect(screen.getByText("Technique")).toBeTruthy();
+      expect(screen.getByText("Mental")).toBeTruthy();
+      expect(screen.getByText("Longevity")).toBeTruthy();
+      expect(screen.getByText("Strength")).toBeTruthy();
+    });
+
+    it("shows skill tree leaf nodes under their categories", async () => {
+      await goToClimbing();
+
+      expect(screen.getByRole("button", { name: "Footwork" })).toBeTruthy();
+      expect(screen.getByRole("button", { name: "Body Positioning" })).toBeTruthy();
+      expect(screen.getByRole("button", { name: "Core Tension" })).toBeTruthy();
+      expect(screen.getByRole("button", { name: "Finger Strength" })).toBeTruthy();
+    });
+
+    it("shows duration input", async () => {
+      await goToClimbing();
+
+      expect(screen.getByLabelText(/duration/i)).toBeTruthy();
+    });
+
+    it("selecting an intent marks it as pressed", async () => {
+      const user = await goToClimbing();
+
+      const footwork = screen.getByRole("button", { name: "Footwork" });
+      await user.click(footwork);
+
+      expect(footwork.getAttribute("aria-pressed")).toBe("true");
+    });
+
+    it("submitting with intent and duration calls onAdd with all fields", async () => {
+      const user = await goToClimbing();
+
+      await user.click(screen.getByRole("button", { name: "Footwork" }));
+      await user.type(screen.getByLabelText(/duration/i), "90");
+      await user.click(screen.getByRole("button", { name: /add climbing session/i }));
+
+      expect(onAdd).toHaveBeenCalledWith("climbing", "Footwork", "footwork", 90);
+      expect(onClose).toHaveBeenCalled();
+    });
+
+    it("cannot submit without selecting an intent", async () => {
+      const user = await goToClimbing();
+
+      await user.type(screen.getByLabelText(/duration/i), "90");
+      await user.click(screen.getByRole("button", { name: /add climbing session/i }));
+
+      expect(onAdd).not.toHaveBeenCalled();
+    });
+
+    it("cannot submit without entering duration", async () => {
+      const user = await goToClimbing();
+
+      await user.click(screen.getByRole("button", { name: "Footwork" }));
+      await user.click(screen.getByRole("button", { name: /add climbing session/i }));
+
+      expect(onAdd).not.toHaveBeenCalled();
+    });
+
+    it("cannot submit with zero duration", async () => {
+      const user = await goToClimbing();
+
+      await user.click(screen.getByRole("button", { name: "Footwork" }));
+      await user.type(screen.getByLabelText(/duration/i), "0");
+      await user.click(screen.getByRole("button", { name: /add climbing session/i }));
+
+      expect(onAdd).not.toHaveBeenCalled();
+    });
+
+    it("back button resets intent and duration state", async () => {
+      const user = await goToClimbing();
+
+      await user.click(screen.getByRole("button", { name: "Footwork" }));
+      await user.type(screen.getByLabelText(/duration/i), "90");
+      await user.click(screen.getByRole("button", { name: /back/i }));
+
+      await user.click(screen.getByRole("button", { name: /climbing session/i }));
+
+      const footwork = screen.getByRole("button", { name: "Footwork" });
+      expect(footwork.getAttribute("aria-pressed")).toBe("false");
+      expect((screen.getByLabelText(/duration/i) as HTMLInputElement).value).toBe("");
+    });
+  });
+
   describe("overlay close", () => {
     it("clicking overlay calls onClose", async () => {
       const user = userEvent.setup();

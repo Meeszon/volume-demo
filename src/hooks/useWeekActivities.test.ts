@@ -196,6 +196,53 @@ describe("useWeekActivities", () => {
       );
     });
 
+    it("persists climbing activity with intent_node_id and duration_minutes", async () => {
+      mockFetchActivities.mockResolvedValue([]);
+      const persisted = makeDbActivity({
+        id: "server-climbing",
+        scheduled_date: "2026-04-27",
+        type: "climbing",
+        title: "Footwork",
+        intent_node_id: "footwork",
+        duration_minutes: 90,
+      });
+      mockInsertActivity.mockResolvedValue(persisted);
+
+      const { result } = renderHook(() => useWeekActivities(monday));
+      await waitFor(() => expect(result.current.loading).toBe(false));
+
+      await act(async () => {
+        await result.current.addActivity("Monday", "climbing", "Footwork", "footwork", 90);
+      });
+
+      expect(mockInsertActivity).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "climbing",
+          title: "Footwork",
+          intent_node_id: "footwork",
+          duration_minutes: 90,
+        }),
+      );
+    });
+
+    it("climbing activity card shows duration as subtitle", async () => {
+      mockFetchActivities.mockResolvedValue([
+        makeDbActivity({
+          id: "climb-1",
+          type: "climbing",
+          title: "Footwork",
+          intent_node_id: "footwork",
+          duration_minutes: 90,
+        }),
+      ]);
+
+      const { result } = renderHook(() => useWeekActivities(monday));
+      await waitFor(() => expect(result.current.loading).toBe(false));
+
+      expect(result.current.columns.Monday[0].title).toBe("Footwork");
+      expect(result.current.columns.Monday[0].subtitle).toBe("90 min");
+    });
+
     it("rolls back optimistic add on Supabase error", async () => {
       mockFetchActivities.mockResolvedValue([]);
       mockInsertActivity.mockRejectedValue(new Error("insert failed"));
