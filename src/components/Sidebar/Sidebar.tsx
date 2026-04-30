@@ -3,7 +3,6 @@ import {
   ScheduleIcon,
   ActivitiesIcon,
   GoalsIcon,
-  Goals2Icon,
   ChevronDownIcon,
 } from "../icons";
 import styles from "./Sidebar.module.css";
@@ -11,8 +10,7 @@ import styles from "./Sidebar.module.css";
 const NAV_ITEMS = [
   { to: "/schedule", label: "Schedule", icon: <ScheduleIcon /> },
   { to: "/activities", label: "Activities", icon: <ActivitiesIcon /> },
-  { to: "/goals", label: "Goals", icon: <GoalsIcon /> },
-  { to: "/goals2", label: "Goals 2", icon: <Goals2Icon /> },
+  { to: "/goals", label: "Skill Tree", icon: <GoalsIcon /> },
 ] as const;
 
 export function Sidebar() {

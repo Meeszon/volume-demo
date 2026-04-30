@@ -2,13 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
 import { DAYS, initialData } from "../../data/schedule";
-import type { Columns } from "../../types";
+import type { Activity, Columns } from "../../types";
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "../../components/icons";
 import { ActivityCard } from "./ActivityCard";
+import { AddActivityModal } from "./AddActivityModal";
 import styles from "./schedule.module.css";
 
 export function SchedulePage() {
   const [columns, setColumns] = useState<Columns>(initialData);
+  const [modalDayId, setModalDayId] = useState<string | null>(null);
 
   const boardRef = useRef<HTMLDivElement>(null);
   const scrollDrag = useRef({ active: false, startX: 0, scrollLeft: 0 });
@@ -62,6 +64,18 @@ export function SchedulePage() {
     setColumns(newColumns);
   };
 
+  const handleAddActivity = (dayId: string, activity: Activity) => {
+    setColumns((prev) => ({
+      ...prev,
+      [dayId]: [
+        ...prev[dayId],
+        { ...activity, id: `${activity.id}-${Date.now()}` },
+      ],
+    }));
+  };
+
+  const modalDay = modalDayId ? DAYS.find((d) => d.id === modalDayId) : null;
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -92,7 +106,7 @@ export function SchedulePage() {
                   <div className={styles.columnDayName}>{day.id}</div>
                   <div className={styles.columnDate}>{day.date}</div>
                 </div>
-                <button className={styles.addActivityBtn}>
+                <button className={styles.addActivityBtn} onClick={() => setModalDayId(day.id)}>
                   <PlusIcon />
                   <span className={styles.addActivityLabel}>Add Activity</span>
                 </button>
@@ -119,6 +133,13 @@ export function SchedulePage() {
           </div>
         </div>
       </DragDropContext>
+      {modalDay && (
+        <AddActivityModal
+          dayLabel={`${modalDay.id} ${modalDay.date}`}
+          onClose={() => setModalDayId(null)}
+          onAdd={(activity) => handleAddActivity(modalDay.id, activity)}
+        />
+      )}
     </div>
   );
 }

@@ -31,18 +31,6 @@ export function GoalsIcon() {
   );
 }
 
-export function Goals2Icon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <circle cx="4" cy="8" r="1.5" stroke="#787878" strokeWidth="1.2" />
-      <circle cx="12" cy="4.5" r="1.5" stroke="#787878" strokeWidth="1.2" />
-      <circle cx="12" cy="11.5" r="1.5" stroke="#787878" strokeWidth="1.2" />
-      <path d="M5.5 8L10.5 4.5" stroke="#787878" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M5.5 8L10.5 11.5" stroke="#787878" strokeWidth="1.2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 /* ── Chevrons ── */
 
 export function ChevronDownIcon() {

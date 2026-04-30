@@ -1,0 +1,163 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: white;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 0;
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #413f39;
+}
+
+.closeBtn {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  color: #c4c3c0;
+  cursor: pointer;
+  padding: 0 2px;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1;
+}
+
+.closeBtn:hover { color: #787878; }
+
+/* ── Inner tab bar ── */
+
+.tabBar {
+  display: flex;
+  gap: 0;
+  padding: 10px 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.tab {
+  padding: 6px 12px 7px;
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #787878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab:hover { color: #413f39; }
+
+.tabActive {
+  color: #413f39;
+  font-weight: 600;
+  border-bottom-color: #413f39;
+}
+
+/* ── Content area ── */
+
+.noGoalsHint {
+  font-size: 12px;
+  color: #9d9c99;
+  padding: 12px 16px 0;
+  margin: 0;
+}
+
+.activityList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #e0e0e0 transparent;
+}
+
+.categoryHeader {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9d9c99;
+  padding: 10px 16px 4px;
+}
+
+.activityItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.1s ease;
+}
+
+.activityItem:hover { background-color: #fafafa; }
+
+.activityAccent {
+  width: 4px;
+  height: 32px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.activityText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.activityTitle {
+  font-size: 13px;
+  color: #413f39;
+  font-weight: 500;
+}
+
+.activitySubtitle {
+  font-size: 11px;
+  color: #9d9c99;
+}
+
+.activityTagLabel {
+  font-size: 10px;
+  color: #b0afa9;
+  flex-shrink: 0;
+  text-align: right;
+  max-width: 90px;
+  line-height: 1.3;
+}
+
+.empty {
+  font-size: 13px;
+  color: #c4c3c0;
+  text-align: center;
+  padding: 24px 16px;
+  margin: 0;
+}
