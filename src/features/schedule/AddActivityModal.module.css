@@ -22,8 +22,8 @@
 .modalHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 16px 0;
+  gap: 8px;
+  padding: 16px 16px 12px;
   flex-shrink: 0;
 }
 
@@ -31,6 +31,7 @@
   font-size: 14px;
   font-weight: bold;
   color: #413f39;
+  flex: 1;
 }
 
 .closeBtn {
@@ -46,69 +47,71 @@
 
 .closeBtn:hover { color: #787878; }
 
-/* ── Inner tab bar ── */
-
-.tabBar {
-  display: flex;
-  gap: 0;
-  padding: 10px 16px 0;
-  border-bottom: 1px solid #f0f0f0;
+.backBtn {
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: #787878;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-family: Arial, Helvetica, sans-serif;
   flex-shrink: 0;
 }
 
-.tab {
-  padding: 6px 12px 7px;
-  font-size: 12px;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #787878;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
+.backBtn:hover { color: #413f39; }
+
+/* ── Step 1: Category picker ── */
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 8px 16px 16px;
+}
+
+.categoryBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
   cursor: pointer;
-  white-space: nowrap;
-}
-
-.tab:hover { color: #413f39; }
-
-.tabActive {
-  color: #413f39;
+  font-size: 13px;
   font-weight: 600;
-  border-bottom-color: #413f39;
+  color: #413f39;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-/* ── Content area ── */
-
-.noGoalsHint {
-  font-size: 12px;
-  color: #9d9c99;
-  padding: 12px 16px 0;
-  margin: 0;
+.categoryBtn:hover {
+  background-color: #fafafa;
 }
+
+.categoryDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Step 2: Template list ── */
 
 .activityList {
   flex: 1;
   overflow-y: auto;
-  padding: 8px 0;
+  padding: 0 0 8px;
   scrollbar-width: thin;
   scrollbar-color: #e0e0e0 transparent;
 }
 
-.categoryHeader {
-  font-size: 11px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #9d9c99;
-  padding: 10px 16px 4px;
-}
-
-.activityItem {
+.templateItem {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   width: 100%;
-  padding: 9px 16px;
+  padding: 10px 16px;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -117,19 +120,20 @@
   transition: background-color 0.1s ease;
 }
 
-.activityItem:hover { background-color: #fafafa; }
+.templateItem:hover { background-color: #fafafa; }
 
 .activityAccent {
   width: 4px;
-  height: 32px;
+  min-height: 24px;
   border-radius: 2px;
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.activityText {
+.templateText {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   flex: 1;
   min-width: 0;
 }
@@ -140,24 +144,67 @@
   font-weight: 500;
 }
 
-.activitySubtitle {
+.exerciseList {
   font-size: 11px;
   color: #9d9c99;
+  line-height: 1.4;
 }
 
-.activityTagLabel {
-  font-size: 10px;
-  color: #b0afa9;
-  flex-shrink: 0;
-  text-align: right;
-  max-width: 90px;
-  line-height: 1.3;
+/* ── Custom input row ── */
+
+.customRow {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 4px;
 }
 
-.empty {
+.customInput {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
   font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #413f39;
+  outline: none;
+}
+
+.customInput:focus {
+  border-color: #c4c3c0;
+}
+
+.customInput::placeholder {
   color: #c4c3c0;
+}
+
+.customAddBtn {
+  padding: 7px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #413f39;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.customAddBtn:hover {
+  background: #2d2b27;
+}
+
+/* ── Placeholder (climbing) ── */
+
+.placeholder {
+  padding: 32px 16px;
   text-align: center;
-  padding: 24px 16px;
+}
+
+.placeholderText {
+  font-size: 13px;
+  color: #9d9c99;
   margin: 0;
 }
