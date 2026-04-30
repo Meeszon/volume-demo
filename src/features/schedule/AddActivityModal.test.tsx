@@ -117,6 +117,26 @@ describe("AddActivityModal", () => {
       expect(onAdd).not.toHaveBeenCalled();
       expect(onClose).not.toHaveBeenCalled();
     });
+
+    it("submitting custom text via Enter key calls onAdd", async () => {
+      const user = await goToConditioning();
+
+      const input = screen.getByPlaceholderText(/custom activity/i);
+      await user.type(input, "Barbell Rows{Enter}");
+
+      expect(onAdd).toHaveBeenCalledWith("conditioning", "Barbell Rows");
+      expect(onClose).toHaveBeenCalled();
+    });
+
+    it("does not submit whitespace-only custom text", async () => {
+      const user = await goToConditioning();
+
+      const input = screen.getByPlaceholderText(/custom activity/i);
+      await user.type(input, "   ");
+      await user.click(screen.getByRole("button", { name: /^add$/i }));
+
+      expect(onAdd).not.toHaveBeenCalled();
+    });
   });
 
   describe("Step 2: Mobility", () => {
@@ -188,6 +208,12 @@ describe("AddActivityModal", () => {
 
       expect(onAdd).toHaveBeenCalledWith("warmup", "General Warm Up");
       expect(onClose).toHaveBeenCalled();
+    });
+
+    it("does not show custom input field", async () => {
+      await goToWarmup();
+
+      expect(screen.queryByPlaceholderText(/custom activity/i)).toBeNull();
     });
   });
 
