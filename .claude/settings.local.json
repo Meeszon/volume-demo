@@ -25,7 +25,13 @@
       "Bash(git commit *)",
       "Bash(git rm *)",
       "Bash(node -e \"const l = require\\('./node_modules/lucide-react/dist/cjs/lucide-react.js'\\); console.log\\(['Footprints','Dumbbell','Wrench','Puzzle','Spline','Brain','Activity','Eye','Target','Heart','User','Zap','RotateCcw','RotateCw','Hand','RefreshCw','GripHorizontal'].map\\(n => n + ': ' + \\(l[n] ? 'OK' : 'MISSING'\\)\\).join\\('\\\\n'\\)\\)\")",
-      "Bash(node -e \"const l = require\\('./node_modules/lucide-react/dist/cjs/lucide-react.js'\\); const keys = Object.keys\\(l\\).filter\\(k => /shoe|boot|sneaker|foot|run|sport/i.test\\(k\\)\\); console.log\\(keys.join\\('\\\\n'\\)\\)\")"
+      "Bash(node -e \"const l = require\\('./node_modules/lucide-react/dist/cjs/lucide-react.js'\\); const keys = Object.keys\\(l\\).filter\\(k => /shoe|boot|sneaker|foot|run|sport/i.test\\(k\\)\\); console.log\\(keys.join\\('\\\\n'\\)\\)\")",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(curl -sI \"https://api.anthropic.com/v1/design/h/vqf1_RstEDRHyGZ7x2sVYQ\")",
+      "Bash(curl -sL \"https://api.anthropic.com/v1/design/h/vqf1_RstEDRHyGZ7x2sVYQ\")",
+      "Bash(gunzip)",
+      "Bash(tar -xz -C /tmp/design_bundle)",
+      "Read(//tmp/**)"
     ]
   }
 }

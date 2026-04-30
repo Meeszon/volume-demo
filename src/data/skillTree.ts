@@ -50,7 +50,7 @@ export const SKILL_TREE: TreeNode[] = [
   },
   {
     id: "flexibility-mobility",
-    label: "Flexibility & Mobility",
+    label: "Mobility",
     children: [
       {
         id: "hip-mobility",
@@ -128,7 +128,7 @@ export const SKILL_TREE: TreeNode[] = [
   },
   {
     id: "grips",
-    label: "Grips",
+    label: "Longevity",
     children: [
       {
         id: "slopers",
@@ -167,7 +167,7 @@ export const SKILL_TREE: TreeNode[] = [
   },
   {
     id: "physical-strength",
-    label: "Physical Strength",
+    label: "Strength",
     children: [
       {
         id: "core-tension",
