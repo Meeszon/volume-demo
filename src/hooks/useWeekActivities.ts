@@ -257,11 +257,8 @@ export function useWeekActivities(weekMonday: Date) {
           const orderUpdates = [
             ...sourceDayActs.map((a, i) => ({ id: a.id, order: i })),
             ...destDayActs
-              .filter((a) => a.id !== movedActivityId)
-              .map((a, i) => {
-                const actualIndex = destDayActs.indexOf(a);
-                return { id: a.id, order: actualIndex };
-              }),
+              .map((a, i) => ({ id: a.id, order: i }))
+              .filter((u) => u.id !== movedActivityId),
           ];
           if (orderUpdates.length > 0) {
             await updateActivityOrders(orderUpdates);
