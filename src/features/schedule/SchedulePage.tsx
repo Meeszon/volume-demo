@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
-import { DAYS, initialData } from "../../data/schedule";
+import { initialData } from "../../data/schedule";
 import type { Activity, Columns } from "../../types";
+import { getMonday, getWeekDays, shiftWeek, formatWeekLabel, isCurrentWeek } from "../../utils/weekDates";
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "../../components/icons";
 import { ActivityCard } from "./ActivityCard";
 import { AddActivityModal } from "./AddActivityModal";
@@ -11,6 +12,15 @@ import styles from "./schedule.module.css";
 export function SchedulePage() {
   const [columns, setColumns] = useState<Columns>(initialData);
   const [modalDayId, setModalDayId] = useState<string | null>(null);
+  const [weekMonday, setWeekMonday] = useState(() => getMonday(new Date()));
+
+  const days = useMemo(() => getWeekDays(weekMonday), [weekMonday]);
+  const weekLabel = useMemo(() => formatWeekLabel(weekMonday), [weekMonday]);
+  const onCurrentWeek = useMemo(() => isCurrentWeek(weekMonday), [weekMonday]);
+
+  const goToPrevWeek = useCallback(() => setWeekMonday((m) => shiftWeek(m, -1)), []);
+  const goToNextWeek = useCallback(() => setWeekMonday((m) => shiftWeek(m, 1)), []);
+  const goToThisWeek = useCallback(() => setWeekMonday(getMonday(new Date())), []);
 
   const boardRef = useRef<HTMLDivElement>(null);
   const scrollDrag = useRef({ active: false, startX: 0, scrollLeft: 0 });
@@ -74,19 +84,25 @@ export function SchedulePage() {
     }));
   };
 
-  const modalDay = modalDayId ? DAYS.find((d) => d.id === modalDayId) : null;
+  const modalDay = modalDayId ? days.find((d) => d.id === modalDayId) : null;
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
         <div className={styles.weekPicker}>
-          <button className={styles.weekPickerBtn}>
+          <button className={styles.weekPickerBtn} onClick={goToPrevWeek}>
             <ChevronLeftIcon />
           </button>
           <div className={styles.weekPickerDivider} />
-          <span className={styles.weekPickerLabel}>This week</span>
+          {onCurrentWeek ? (
+            <span className={styles.weekPickerLabel}>{weekLabel}</span>
+          ) : (
+            <button className={styles.weekPickerLabelBtn} onClick={goToThisWeek}>
+              {weekLabel}
+            </button>
+          )}
           <div className={styles.weekPickerDivider} />
-          <button className={styles.weekPickerBtn}>
+          <button className={styles.weekPickerBtn} onClick={goToNextWeek}>
             <ChevronRightIcon />
           </button>
         </div>
@@ -100,7 +116,7 @@ export function SchedulePage() {
           onMouseMove={onBoardMouseMove}
         >
           <div className={styles.boardInner}>
-            {DAYS.map((day) => (
+            {days.map((day) => (
               <div key={day.id} className={styles.kanbanColumn}>
                 <div className={styles.columnHeader}>
                   <div className={styles.columnDayName}>{day.id}</div>
