@@ -11,7 +11,7 @@ export function SchedulePage() {
   const [modalDayId, setModalDayId] = useState<string | null>(null);
   const [weekMonday, setWeekMonday] = useState(() => getMonday(new Date()));
 
-  const { columns, loading, error, addActivity, handleDragEnd } =
+  const { columns, loading, error, addActivity, deleteActivity, handleDragEnd } =
     useWeekActivities(weekMonday);
 
   const days = useMemo(() => getWeekDays(weekMonday), [weekMonday]);
@@ -107,7 +107,7 @@ export function SchedulePage() {
                       {loading ? null : (columns[day.id] ?? []).map((task, index) => (
                         <Draggable key={task.id} draggableId={task.id} index={index}>
                           {(provided, snapshot) => (
-                            <ActivityCard task={task} provided={provided} snapshot={snapshot} />
+                            <ActivityCard task={task} provided={provided} snapshot={snapshot} dayId={day.id} onDelete={deleteActivity} />
                           )}
                         </Draggable>
                       ))}
