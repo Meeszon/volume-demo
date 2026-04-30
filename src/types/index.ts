@@ -71,3 +71,12 @@ export interface Day {
 }
 
 export type Columns = Record<string, Activity[]>;
+
+// Activity templates
+export type ActivityCategory = "conditioning" | "mobility" | "warmup";
+
+export interface ActivityTemplate {
+  name: string;
+  category: ActivityCategory;
+  exercises?: string[];
+}
