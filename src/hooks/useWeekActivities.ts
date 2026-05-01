@@ -9,6 +9,7 @@ import {
   updateActivityOrders,
   moveActivity,
 } from "../data/activitiesApi";
+import { ACTIVITY_TYPE_CONFIG } from "../data/activityTypeConfig";
 
 const DAY_NAMES = [
   "Monday",
@@ -19,13 +20,6 @@ const DAY_NAMES = [
   "Saturday",
   "Sunday",
 ];
-
-const TYPE_ACCENTS: Record<ActivityType, string> = {
-  climbing: "#F5A623",
-  conditioning: "#4DACF7",
-  mobility: "#EF4E8B",
-  warmup: "#7C4DFF",
-};
 
 function formatISODate(date: Date): string {
   const y = date.getFullYear();
@@ -51,7 +45,7 @@ function dbActivityToUi(dbAct: DbActivity): Activity {
     type: dbAct.type,
     title: dbAct.title,
     subtitle,
-    accent: TYPE_ACCENTS[dbAct.type],
+    accent: ACTIVITY_TYPE_CONFIG[dbAct.type].color,
     intentNodeId: dbAct.intent_node_id,
     durationMinutes: dbAct.duration_minutes,
   };

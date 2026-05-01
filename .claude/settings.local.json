@@ -38,7 +38,8 @@
       "Bash(gh issue *)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Recurse -File)",
       "Bash(Select-Object -ExpandProperty FullName)",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Recurse -Directory)"
     ]
   }
 }

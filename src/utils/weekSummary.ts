@@ -1,4 +1,5 @@
 import type { ActivityType } from "../types";
+import { ACTIVITY_TYPE_CONFIG, ACTIVITY_TYPES } from "../data/activityTypeConfig";
 
 export interface SummaryEntry {
   type: ActivityType;
@@ -6,27 +7,6 @@ export interface SummaryEntry {
   target: number;
   colour: string;
 }
-
-const TYPE_COLOURS: Record<ActivityType, string> = {
-  climbing: "#F5A623",
-  conditioning: "#4DACF7",
-  mobility: "#EF4E8B",
-  warmup: "#7C4DFF",
-};
-
-export const ACTIVITY_LABELS: Record<ActivityType, string> = {
-  climbing: "Climbing",
-  conditioning: "Conditioning",
-  mobility: "Mobility",
-  warmup: "Warmup",
-};
-
-export const ACTIVITY_TYPES: ActivityType[] = [
-  "climbing",
-  "conditioning",
-  "mobility",
-  "warmup",
-];
 
 export function getWeekSummary(
   activities: Array<{ type: ActivityType }>,
@@ -36,6 +16,6 @@ export function getWeekSummary(
     type,
     count: activities.filter((a) => a.type === type).length,
     target: targets[type],
-    colour: TYPE_COLOURS[type],
+    colour: ACTIVITY_TYPE_CONFIG[type].color,
   }));
 }

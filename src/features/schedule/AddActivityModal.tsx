@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { getTemplatesByCategory } from "../../data/activityTemplates";
 import { getIntentOptions, type IntentOption } from "../../data/skillTree";
+import { ACTIVITY_TYPES, ACTIVITY_TYPE_CONFIG } from "../../data/activityTypeConfig";
 import type { ActivityType, ActivityCategory } from "../../types";
 import styles from "./AddActivityModal.module.css";
 
@@ -9,20 +10,6 @@ interface AddActivityModalProps {
   onClose: () => void;
   onAdd: (type: ActivityType, title: string, intentNodeId?: string, durationMinutes?: number) => void;
 }
-
-const CATEGORIES: Array<{ type: ActivityType; label: string }> = [
-  { type: "climbing", label: "Climbing Session" },
-  { type: "conditioning", label: "Conditioning" },
-  { type: "mobility", label: "Mobility" },
-  { type: "warmup", label: "Warm Up" },
-];
-
-const TYPE_COLORS: Record<ActivityType, string> = {
-  climbing: "#F5A623",
-  conditioning: "#4DACF7",
-  mobility: "#EF4E8B",
-  warmup: "#7C4DFF",
-};
 
 export function AddActivityModal({
   dayLabel,
@@ -65,18 +52,18 @@ export function AddActivityModal({
 
   const renderCategoryPicker = () => (
     <div className={styles.categoryGrid}>
-      {CATEGORIES.map((cat) => (
+      {ACTIVITY_TYPES.map((type) => (
         <button
-          key={cat.type}
+          key={type}
           className={styles.categoryBtn}
-          style={{ borderColor: TYPE_COLORS[cat.type] }}
-          onClick={() => setSelectedCategory(cat.type)}
+          style={{ borderColor: ACTIVITY_TYPE_CONFIG[type].color }}
+          onClick={() => setSelectedCategory(type)}
         >
           <span
             className={styles.categoryDot}
-            style={{ backgroundColor: TYPE_COLORS[cat.type] }}
+            style={{ backgroundColor: ACTIVITY_TYPE_CONFIG[type].color }}
           />
-          {cat.label}
+          {ACTIVITY_TYPE_CONFIG[type].pickerLabel}
         </button>
       ))}
     </div>
@@ -94,7 +81,7 @@ export function AddActivityModal({
           >
             <span
               className={styles.activityAccent}
-              style={{ backgroundColor: TYPE_COLORS[category] }}
+              style={{ backgroundColor: ACTIVITY_TYPE_CONFIG[category].color }}
             />
             <div className={styles.templateText}>
               <span className={styles.activityTitle}>{t.name}</span>
@@ -201,7 +188,7 @@ export function AddActivityModal({
   };
 
   const stepLabel = selectedCategory
-    ? CATEGORIES.find((c) => c.type === selectedCategory)?.label
+    ? ACTIVITY_TYPE_CONFIG[selectedCategory].pickerLabel
     : null;
 
   return (

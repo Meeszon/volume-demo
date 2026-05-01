@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import type { Activity } from "../../types";
 import type { LogData } from "../../hooks/useActivityLog";
-import { ACTIVITY_LABELS } from "../../utils/weekSummary";
+import { ACTIVITY_TYPE_CONFIG } from "../../data/activityTypeConfig";
 import { XIcon, TrashIcon } from "../../components/icons";
 import styles from "./ActivityDetailPanel.module.css";
 
@@ -66,7 +66,7 @@ export function ActivityDetailPanel({
             <div className={styles.panelAccent} style={{ backgroundColor: activity.accent }} />
             <div>
               <div className={styles.panelTitle}>{activity.title}</div>
-              <div className={styles.panelType}>{ACTIVITY_LABELS[activity.type]}</div>
+              <div className={styles.panelType}>{ACTIVITY_TYPE_CONFIG[activity.type].summaryLabel}</div>
             </div>
           </div>
           <button className={styles.closeBtn} onClick={onClose} aria-label="Close panel">

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import type { ActivityType } from "../../types";
-import { ACTIVITY_LABELS, ACTIVITY_TYPES } from "../../utils/weekSummary";
+import { ACTIVITY_TYPES, ACTIVITY_TYPE_CONFIG } from "../../data/activityTypeConfig";
 import type { SummaryEntry } from "../../utils/weekSummary";
 import { SettingsIcon } from "../../components/icons";
 import styles from "./LoadSummaryBar.module.css";
@@ -41,7 +41,7 @@ export function LoadSummaryBar({ summary, targets, onSetTarget }: LoadSummaryBar
           summary.map((entry) => (
             <div key={entry.type} className={styles.entry}>
               <span className={styles.entryLabel} style={{ color: entry.colour }}>
-                {ACTIVITY_LABELS[entry.type]}
+                {ACTIVITY_TYPE_CONFIG[entry.type].summaryLabel}
               </span>
               <div className={styles.progressTrack}>
                 <div
@@ -75,7 +75,7 @@ export function LoadSummaryBar({ summary, targets, onSetTarget }: LoadSummaryBar
             <div className={styles.popoverTitle}>Weekly Targets</div>
             {ACTIVITY_TYPES.map((type) => (
               <label key={type} className={styles.popoverRow}>
-                <span className={styles.popoverLabel}>{ACTIVITY_LABELS[type]}</span>
+                <span className={styles.popoverLabel}>{ACTIVITY_TYPE_CONFIG[type].summaryLabel}</span>
                 <input
                   className={styles.popoverInput}
                   type="number"
