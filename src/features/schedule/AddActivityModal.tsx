@@ -8,7 +8,7 @@ import styles from "./AddActivityModal.module.css";
 interface AddActivityModalProps {
   dayLabel: string;
   onClose: () => void;
-  onAdd: (type: ActivityType, title: string, intentNodeId?: string, durationMinutes?: number) => void;
+  onAdd: (type: ActivityType, title: string, focus?: string, durationMinutes?: number) => void;
 }
 
 export function AddActivityModal({

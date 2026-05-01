@@ -77,7 +77,7 @@ export function ActivityDetailPanel({
         <div className={styles.panelBody}>
           {activity.type === "climbing" && (
             <ClimbingForm
-              intentNodeId={activity.intentNodeId ?? null}
+              intentNodeId={activity.focus ?? null}
               formData={formData}
               setField={setField}
               readOnly={isReadOnly}

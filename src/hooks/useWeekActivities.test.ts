@@ -43,7 +43,7 @@ function makeDbActivity(overrides: Partial<DbActivity> = {}): DbActivity {
     scheduled_date: "2026-04-27",
     type: "conditioning",
     title: "Pull Ups",
-    intent_node_id: null,
+    focus: null,
     duration_minutes: null,
     order: 0,
     created_at: "2026-04-27T00:00:00Z",
@@ -196,14 +196,14 @@ describe("useWeekActivities", () => {
       );
     });
 
-    it("persists climbing activity with intent_node_id and duration_minutes", async () => {
+    it("persists climbing activity with focus and duration_minutes", async () => {
       mockFetchActivities.mockResolvedValue([]);
       const persisted = makeDbActivity({
         id: "server-climbing",
         scheduled_date: "2026-04-27",
         type: "climbing",
         title: "Footwork",
-        intent_node_id: "footwork",
+        focus: "Footwork",
         duration_minutes: 90,
       });
       mockInsertActivity.mockResolvedValue(persisted);
@@ -212,14 +212,14 @@ describe("useWeekActivities", () => {
       await waitFor(() => expect(result.current.loading).toBe(false));
 
       await act(async () => {
-        await result.current.addActivity("Monday", "climbing", "Footwork", "footwork", 90);
+        await result.current.addActivity("Monday", "climbing", "Footwork", "Footwork", 90);
       });
 
       expect(mockInsertActivity).toHaveBeenCalledWith(
         expect.objectContaining({
           type: "climbing",
           title: "Footwork",
-          intent_node_id: "footwork",
+          focus: "Footwork",
           duration_minutes: 90,
         }),
       );
@@ -231,7 +231,7 @@ describe("useWeekActivities", () => {
           id: "climb-1",
           type: "climbing",
           title: "Footwork",
-          intent_node_id: "footwork",
+          focus: "Footwork",
           duration_minutes: 90,
         }),
       ]);

@@ -46,7 +46,7 @@ function dbActivityToUi(dbAct: DbActivity): Activity {
     title: dbAct.title,
     subtitle,
     accent: ACTIVITY_TYPE_CONFIG[dbAct.type].color,
-    intentNodeId: dbAct.intent_node_id,
+    focus: dbAct.focus,
     durationMinutes: dbAct.duration_minutes,
   };
 }
@@ -120,7 +120,7 @@ export function useWeekActivities(weekMonday: Date) {
   );
 
   const addActivity = useCallback(
-    async (dayId: string, type: ActivityType, title: string, intentNodeId?: string, durationMinutes?: number) => {
+    async (dayId: string, type: ActivityType, title: string, focus?: string, durationMinutes?: number) => {
       const userId = session?.user?.id;
       if (!userId) return;
 
@@ -137,7 +137,7 @@ export function useWeekActivities(weekMonday: Date) {
         scheduled_date: scheduledDate,
         type,
         title,
-        intent_node_id: intentNodeId ?? null,
+        focus: focus ?? null,
         duration_minutes: durationMinutes ?? null,
         order,
         created_at: new Date().toISOString(),
@@ -151,7 +151,7 @@ export function useWeekActivities(weekMonday: Date) {
           scheduled_date: scheduledDate,
           type,
           title,
-          intent_node_id: intentNodeId ?? null,
+          focus: focus ?? null,
           duration_minutes: durationMinutes ?? null,
           order,
         });

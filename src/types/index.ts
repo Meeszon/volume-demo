@@ -64,7 +64,7 @@ export interface Activity {
   grade?: string;
   accent: string;
   goalTags?: GoalTag[];
-  intentNodeId?: string | null;
+  focus?: string | null;
   durationMinutes?: number | null;
 }
 
@@ -84,7 +84,7 @@ export interface DbActivity {
   scheduled_date: string;
   type: ActivityType;
   title: string;
-  intent_node_id: string | null;
+  focus: string | null;
   duration_minutes: number | null;
   order: number;
   created_at: string;
