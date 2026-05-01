@@ -96,7 +96,133 @@
   flex-shrink: 0;
 }
 
-/* ── Step 2: Template list ── */
+/* ── Step 2: Climbing form ── */
+
+.climbingForm {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e0e0e0 transparent;
+}
+
+.formSection {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #787878;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+/* Duration presets */
+
+.presetRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.presetBtn {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  color: #413f39;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.presetBtn:hover {
+  border-color: #c4c3c0;
+  background-color: #fafafa;
+}
+
+.presetSelected {
+  border-color: #DA2128;
+  background-color: #fef2f2;
+  color: #DA2128;
+  font-weight: 600;
+}
+
+/* Focus options */
+
+.focusRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.focusBtn {
+  padding: 6px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  background: white;
+  cursor: pointer;
+  font-size: 12px;
+  color: #413f39;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.focusBtn:hover {
+  border-color: #c4c3c0;
+  background-color: #fafafa;
+}
+
+.focusSelected {
+  border-color: #DA2128;
+  background-color: #fef2f2;
+  color: #DA2128;
+  font-weight: 600;
+}
+
+/* ── Step 2: Tabs ── */
+
+.tabsContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.tabBar {
+  display: flex;
+  padding: 0 16px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.tab {
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  color: #787878;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: color 0.15s ease;
+}
+
+.tab:hover { color: #413f39; }
+
+.tabActive {
+  color: #413f39;
+  font-weight: 600;
+  border-bottom-color: #413f39;
+}
+
+/* ── Template list (shared by tabs and edit) ── */
 
 .activityList {
   flex: 1;
@@ -150,152 +276,82 @@
   line-height: 1.4;
 }
 
-/* ── Custom input row ── */
+/* ── Step 3: Edit screen ── */
 
-.customRow {
-  display: flex;
-  gap: 8px;
-  padding: 10px 16px;
-  border-top: 1px solid #f0f0f0;
-  margin-top: 4px;
-}
-
-.customInput {
-  flex: 1;
-  padding: 7px 10px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: 13px;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #413f39;
-  outline: none;
-}
-
-.customInput:focus {
-  border-color: #c4c3c0;
-}
-
-.customInput::placeholder {
-  color: #c4c3c0;
-}
-
-.customAddBtn {
-  padding: 7px 14px;
-  border: none;
-  border-radius: 6px;
-  background: #413f39;
-  color: white;
-  font-size: 13px;
+.editBlockName {
+  padding: 12px 16px 8px;
+  font-size: 14px;
   font-weight: 600;
-  font-family: Arial, Helvetica, sans-serif;
-  cursor: pointer;
+  color: #413f39;
+  border-bottom: 1px solid #f0f0f0;
   flex-shrink: 0;
 }
 
-.customAddBtn:hover {
-  background: #2d2b27;
-}
-
-/* ── Step 2: Climbing session form ── */
-
-.climbingForm {
+.editScreen {
   display: flex;
   flex-direction: column;
-  padding: 0 0 12px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #e0e0e0 transparent;
+  flex: 1;
+  overflow: hidden;
 }
 
-.intentSection {
-  padding: 0 16px 8px;
+.editExerciseRow {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f5f5f5;
 }
 
-.fieldLabel {
+.editExerciseName {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  color: #787878;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #413f39;
   margin-bottom: 8px;
 }
 
-.intentList {
+.editFields {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
 }
 
-.intentGroup {
+.editField {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.intentCategory {
-  font-size: 11px;
+.editFieldLabel {
+  font-size: 10px;
   font-weight: 600;
   color: #9d9c99;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 
-.intentOptions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.intentOption {
-  padding: 6px 12px;
+.editInput {
+  width: 60px;
+  padding: 5px 8px;
   border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  background: white;
-  cursor: pointer;
-  font-size: 12px;
-  color: #413f39;
-  font-family: Arial, Helvetica, sans-serif;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.intentOption:hover {
-  border-color: #c4c3c0;
-  background-color: #fafafa;
-}
-
-.intentSelected {
-  border-color: #DA2128;
-  background-color: #fef2f2;
-  color: #DA2128;
-  font-weight: 600;
-}
-
-.durationSection {
-  padding: 12px 16px 0;
-  border-top: 1px solid #f0f0f0;
-}
-
-.durationInput {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 13px;
   font-family: Arial, Helvetica, sans-serif;
   color: #413f39;
   outline: none;
-  box-sizing: border-box;
 }
 
-.durationInput:focus {
-  border-color: #c4c3c0;
+.editInput:focus { border-color: #c4c3c0; }
+
+.unitLabel {
+  font-size: 11px;
+  color: #9d9c99;
+  padding-bottom: 6px;
 }
 
-.durationInput::placeholder {
-  color: #c4c3c0;
-}
+/* ── Submit row (shared) ── */
 
 .submitRow {
   padding: 12px 16px 0;
+  flex-shrink: 0;
 }
 
 .submitBtn {
@@ -309,6 +365,7 @@
   font-weight: 600;
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
+  margin-bottom: 12px;
 }
 
 .submitBtn:hover {

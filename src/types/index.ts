@@ -86,6 +86,7 @@ export interface DbActivity {
   title: string;
   focus: string | null;
   duration_minutes: number | null;
+  details: ActivityDetails | null;
   order: number;
   created_at: string;
 }

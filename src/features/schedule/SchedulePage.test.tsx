@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 const mockUseWeekActivities = vi.hoisted(() => vi.fn());
@@ -127,6 +127,8 @@ describe("SchedulePage", () => {
 
       await user.click(screen.getByRole("button", { name: /conditioning/i }));
       await user.click(screen.getByText("Weighted Pull Ups"));
+      const modal = screen.getByTestId("modal-overlay");
+      await user.click(within(modal).getByRole("button", { name: /add activity/i }));
 
       expect(mockAddActivity).toHaveBeenCalledWith(
         expect.any(String),
@@ -134,6 +136,7 @@ describe("SchedulePage", () => {
         "Weighted Pull Ups",
         undefined,
         undefined,
+        { kind: "exercise", sets: 3, value: 10, unit: "reps", rest: 60 },
       );
       expect(screen.queryByTestId("modal-overlay")).toBeNull();
     });

@@ -92,6 +92,7 @@ describe("activitiesApi", () => {
         title: "Ankle Flexibility",
         focus: null,
         duration_minutes: null,
+        details: null,
         order: 0,
       };
       const returned = { ...input, id: "new-id", created_at: "2026-04-28T00:00:00Z" };
@@ -123,6 +124,7 @@ describe("activitiesApi", () => {
           title: "Test",
           focus: null,
           duration_minutes: null,
+          details: null,
           order: 0,
         }),
       ).rejects.toEqual({ message: "insert failed" });

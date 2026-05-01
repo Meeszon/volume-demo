@@ -45,6 +45,7 @@ function makeDbActivity(overrides: Partial<DbActivity> = {}): DbActivity {
     title: "Pull Ups",
     focus: null,
     duration_minutes: null,
+    details: null,
     order: 0,
     created_at: "2026-04-27T00:00:00Z",
     ...overrides,
@@ -225,12 +226,12 @@ describe("useWeekActivities", () => {
       );
     });
 
-    it("climbing activity card shows duration as subtitle", async () => {
+    it("climbing activity card subtitle shows duration and focus", async () => {
       mockFetchActivities.mockResolvedValue([
         makeDbActivity({
           id: "climb-1",
           type: "climbing",
-          title: "Footwork",
+          title: "Climbing Session",
           focus: "Footwork",
           duration_minutes: 90,
         }),
@@ -239,8 +240,8 @@ describe("useWeekActivities", () => {
       const { result } = renderHook(() => useWeekActivities(monday));
       await waitFor(() => expect(result.current.loading).toBe(false));
 
-      expect(result.current.columns.Monday[0].title).toBe("Footwork");
-      expect(result.current.columns.Monday[0].subtitle).toBe("90 min");
+      expect(result.current.columns.Monday[0].title).toBe("Climbing Session");
+      expect(result.current.columns.Monday[0].subtitle).toBe("90 min · Focus: Footwork");
     });
 
     it("rolls back optimistic add on Supabase error", async () => {

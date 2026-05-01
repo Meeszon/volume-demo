@@ -1,53 +1,129 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { getTemplatesByCategory } from "../../data/activityTemplates";
-import { getIntentOptions, type IntentOption } from "../../data/skillTree";
 import { ACTIVITY_TYPES, ACTIVITY_TYPE_CONFIG } from "../../data/activityTypeConfig";
-import type { ActivityType, ActivityCategory } from "../../types";
+import { FOCUS_OPTIONS } from "../../types";
+import type {
+  ActivityType,
+  ActivityCategory,
+  ActivityTemplate,
+  ActivityDetails,
+  FocusOption,
+} from "../../types";
 import styles from "./AddActivityModal.module.css";
 
 interface AddActivityModalProps {
   dayLabel: string;
   onClose: () => void;
-  onAdd: (type: ActivityType, title: string, focus?: string, durationMinutes?: number) => void;
+  onAdd: (
+    type: ActivityType,
+    title: string,
+    focus?: FocusOption,
+    durationMinutes?: number,
+    details?: ActivityDetails,
+  ) => void;
 }
 
-export function AddActivityModal({
-  dayLabel,
-  onClose,
-  onAdd,
-}: AddActivityModalProps) {
-  const [selectedCategory, setSelectedCategory] = useState<ActivityType | null>(null);
-  const [customText, setCustomText] = useState("");
-  const [selectedIntentId, setSelectedIntentId] = useState<string | null>(null);
-  const [durationText, setDurationText] = useState("");
+type Screen = "category" | "climbing" | "tabs" | "edit";
+type Tab = "exercises" | "blocks";
+type ExerciseEdit = { sets: string; value: string; rest: string };
 
-  const { intentOptions, groupedIntents } = useMemo(() => {
-    const options = getIntentOptions();
-    const grouped = new Map<string, IntentOption[]>();
-    for (const opt of options) {
-      const list = grouped.get(opt.categoryLabel) ?? [];
-      list.push(opt);
-      grouped.set(opt.categoryLabel, list);
+const DURATION_PRESETS = [60, 90, 120, 150] as const;
+
+export function AddActivityModal({ dayLabel, onClose, onAdd }: AddActivityModalProps) {
+  const [screen, setScreen] = useState<Screen>("category");
+  const [activeCategory, setActiveCategory] = useState<ActivityCategory | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>("exercises");
+  const [selectedTemplate, setSelectedTemplate] = useState<ActivityTemplate | null>(null);
+  const [editExercises, setEditExercises] = useState<ExerciseEdit[]>([]);
+  const [selectedDuration, setSelectedDuration] = useState<number>(90);
+  const [selectedFocus, setSelectedFocus] = useState<FocusOption | null>(null);
+
+  const handleSelectCategory = (type: ActivityType) => {
+    if (type === "climbing") {
+      setSelectedDuration(90);
+      setSelectedFocus(null);
+      setScreen("climbing");
+    } else {
+      setActiveCategory(type as ActivityCategory);
+      setActiveTab("exercises");
+      setScreen("tabs");
     }
-    return { intentOptions: options, groupedIntents: grouped };
-  }, []);
-
-  const handleBack = () => {
-    setSelectedCategory(null);
-    setCustomText("");
-    setSelectedIntentId(null);
-    setDurationText("");
   };
 
-  const handleAdd = (type: ActivityType, title: string) => {
-    onAdd(type, title);
+  const handleBack = () => {
+    if (screen === "edit") {
+      setScreen("tabs");
+      setSelectedTemplate(null);
+    } else {
+      setScreen("category");
+      setActiveCategory(null);
+      setSelectedDuration(90);
+      setSelectedFocus(null);
+      setSelectedTemplate(null);
+    }
+  };
+
+  const handleSelectTemplate = (template: ActivityTemplate) => {
+    setSelectedTemplate(template);
+    if (template.kind === "exercise") {
+      setEditExercises([{
+        sets: String(template.defaultSets),
+        value: String(template.defaultValue),
+        rest: String(template.defaultRest),
+      }]);
+    } else {
+      setEditExercises(
+        template.exercises.map((e) => ({
+          sets: String(e.defaultSets),
+          value: String(e.defaultValue),
+          rest: String(e.defaultRest),
+        })),
+      );
+    }
+    setScreen("edit");
+  };
+
+  const handleClimbingSubmit = () => {
+    onAdd("climbing", "Climbing Session", selectedFocus ?? undefined, selectedDuration);
     onClose();
   };
 
-  const handleCustomSubmit = () => {
-    const trimmed = customText.trim();
-    if (!trimmed || !selectedCategory) return;
-    handleAdd(selectedCategory, trimmed);
+  const handleEditConfirm = () => {
+    if (!selectedTemplate || !activeCategory) return;
+
+    const parseVal = (s: string) => parseInt(s, 10) || 0;
+
+    let details: ActivityDetails;
+    if (selectedTemplate.kind === "exercise") {
+      const [ex] = editExercises;
+      details = {
+        kind: "exercise",
+        sets: parseVal(ex.sets),
+        value: parseVal(ex.value),
+        unit: selectedTemplate.unit,
+        rest: parseVal(ex.rest),
+      };
+    } else {
+      details = {
+        kind: "block",
+        exercises: selectedTemplate.exercises.map((e, i) => ({
+          name: e.name,
+          sets: parseVal(editExercises[i].sets),
+          value: parseVal(editExercises[i].value),
+          unit: e.unit,
+          rest: parseVal(editExercises[i].rest),
+        })),
+      };
+    }
+
+    onAdd(activeCategory, selectedTemplate.name, undefined, undefined, details);
+    onClose();
+  };
+
+  const updateExercise = (i: number, field: keyof ExerciseEdit, raw: string) => {
+    setEditExercises((prev) =>
+      prev.map((ex, idx) => (idx === i ? { ...ex, [field]: raw } : ex)),
+    );
   };
 
   const renderCategoryPicker = () => (
@@ -57,7 +133,7 @@ export function AddActivityModal({
           key={type}
           className={styles.categoryBtn}
           style={{ borderColor: ACTIVITY_TYPE_CONFIG[type].color }}
-          onClick={() => setSelectedCategory(type)}
+          onClick={() => handleSelectCategory(type)}
         >
           <span
             className={styles.categoryDot}
@@ -69,102 +145,40 @@ export function AddActivityModal({
     </div>
   );
 
-  const renderTemplateList = (category: ActivityCategory, showCustomInput: boolean) => {
-    const templates = getTemplatesByCategory(category);
-    return (
-      <div className={styles.activityList}>
-        {templates.map((t) => (
-          <button
-            key={t.name}
-            className={styles.templateItem}
-            onClick={() => handleAdd(category, t.name)}
-          >
-            <span
-              className={styles.activityAccent}
-              style={{ backgroundColor: ACTIVITY_TYPE_CONFIG[category].color }}
-            />
-            <div className={styles.templateText}>
-              <span className={styles.activityTitle}>{t.name}</span>
-              {t.kind === "block" && (
-                <span className={styles.exerciseList}>
-                  {t.exercises.map((e) => e.name).join(", ")}
-                </span>
-              )}
-            </div>
-          </button>
-        ))}
-        {showCustomInput && (
-          <div className={styles.customRow}>
-            <input
-              className={styles.customInput}
-              type="text"
-              placeholder="Custom activity name"
-              value={customText}
-              onChange={(e) => setCustomText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleCustomSubmit();
-              }}
-            />
-            <button className={styles.customAddBtn} onClick={handleCustomSubmit}>
-              Add
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const handleClimbingSubmit = () => {
-    if (!selectedIntentId) return;
-    const duration = parseInt(durationText, 10);
-    if (!(duration > 0)) return;
-    const selected = intentOptions.find((o) => o.id === selectedIntentId);
-    if (!selected) return;
-    onAdd("climbing", selected.label, selected.id, duration);
-    onClose();
-  };
-
   const renderClimbing = () => (
     <div className={styles.climbingForm}>
-      <div className={styles.intentSection}>
-        <label className={styles.fieldLabel}>Intent</label>
-        <div className={styles.intentList}>
-          {Array.from(groupedIntents.entries()).map(([category, options]) => (
-            <div key={category} className={styles.intentGroup}>
-              <span className={styles.intentCategory}>{category}</span>
-              <div className={styles.intentOptions}>
-                {options.map((opt) => (
-                  <button
-                    key={opt.id}
-                    className={`${styles.intentOption}${selectedIntentId === opt.id ? ` ${styles.intentSelected}` : ""}`}
-                    aria-pressed={selectedIntentId === opt.id}
-                    onClick={() => setSelectedIntentId(opt.id)}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+      <div className={styles.formSection}>
+        <label className={styles.fieldLabel}>Duration</label>
+        <div className={styles.presetRow}>
+          {DURATION_PRESETS.map((d) => (
+            <button
+              key={d}
+              className={`${styles.presetBtn}${selectedDuration === d ? ` ${styles.presetSelected}` : ""}`}
+              aria-pressed={selectedDuration === d}
+              onClick={() => setSelectedDuration(d)}
+            >
+              {d} min
+            </button>
           ))}
         </div>
       </div>
-      <div className={styles.durationSection}>
-        <label className={styles.fieldLabel} htmlFor="climbing-duration">
-          Duration (minutes)
-        </label>
-        <input
-          id="climbing-duration"
-          className={styles.durationInput}
-          type="number"
-          min="1"
-          placeholder="e.g. 90"
-          value={durationText}
-          onChange={(e) => setDurationText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleClimbingSubmit();
-          }}
-        />
+
+      <div className={styles.formSection}>
+        <label className={styles.fieldLabel}>Focus (optional)</label>
+        <div className={styles.focusRow}>
+          {FOCUS_OPTIONS.map((f) => (
+            <button
+              key={f}
+              className={`${styles.focusBtn}${selectedFocus === f ? ` ${styles.focusSelected}` : ""}`}
+              aria-pressed={selectedFocus === f}
+              onClick={() => setSelectedFocus((prev) => (prev === f ? null : f))}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
       </div>
+
       <div className={styles.submitRow}>
         <button className={styles.submitBtn} onClick={handleClimbingSubmit}>
           Add Climbing Session
@@ -173,35 +187,159 @@ export function AddActivityModal({
     </div>
   );
 
-  const renderStep2 = () => {
-    switch (selectedCategory) {
-      case "conditioning":
-      case "mobility":
-        return renderTemplateList(selectedCategory, true);
-      case "warmup":
-        return renderTemplateList("warmup", false);
-      case "climbing":
-        return renderClimbing();
-      default:
-        return null;
-    }
+  const renderTabs = () => {
+    if (!activeCategory) return null;
+    const templates = getTemplatesByCategory(activeCategory);
+    const color = ACTIVITY_TYPE_CONFIG[activeCategory].color;
+    const list = activeTab === "exercises"
+      ? templates.filter((t) => t.kind === "exercise")
+      : templates.filter((t) => t.kind === "block");
+
+    return (
+      <div className={styles.tabsContainer}>
+        <div className={styles.tabBar} role="tablist">
+          <button
+            role="tab"
+            aria-selected={activeTab === "exercises"}
+            className={`${styles.tab}${activeTab === "exercises" ? ` ${styles.tabActive}` : ""}`}
+            onClick={() => setActiveTab("exercises")}
+          >
+            Exercises
+          </button>
+          <button
+            role="tab"
+            aria-selected={activeTab === "blocks"}
+            className={`${styles.tab}${activeTab === "blocks" ? ` ${styles.tabActive}` : ""}`}
+            onClick={() => setActiveTab("blocks")}
+          >
+            Blocks
+          </button>
+        </div>
+
+        <div className={styles.activityList}>
+          {list.map((t) => (
+            <button
+              key={t.name}
+              className={styles.templateItem}
+              onClick={() => handleSelectTemplate(t)}
+            >
+              <span
+                className={styles.activityAccent}
+                style={{ backgroundColor: color }}
+              />
+              <div className={styles.templateText}>
+                <span className={styles.activityTitle}>{t.name}</span>
+                {t.kind === "block" && (
+                  <span className={styles.exerciseList}>
+                    {t.exercises.map((e) => e.name).join(", ")}
+                  </span>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   };
 
-  const stepLabel = selectedCategory
-    ? ACTIVITY_TYPE_CONFIG[selectedCategory].pickerLabel
-    : null;
+  const renderEdit = () => {
+    if (!selectedTemplate || !activeCategory) return null;
+
+    const exerciseNames =
+      selectedTemplate.kind === "exercise"
+        ? [selectedTemplate.name]
+        : selectedTemplate.exercises.map((e) => e.name);
+    const exerciseUnits =
+      selectedTemplate.kind === "exercise"
+        ? [selectedTemplate.unit]
+        : selectedTemplate.exercises.map((e) => e.unit);
+
+    return (
+      <div className={styles.editScreen}>
+        {selectedTemplate.kind === "block" && (
+          <div className={styles.editBlockName}>{selectedTemplate.name}</div>
+        )}
+        <div className={styles.activityList}>
+          {exerciseNames.map((name, i) => {
+            const unit = exerciseUnits[i];
+            const valueLabelText =
+              unit === "reps" ? `Reps for ${name}` : `Seconds for ${name}`;
+            return (
+              <div
+                key={name}
+                className={styles.editExerciseRow}
+                data-testid={`exercise-row-${name}`}
+              >
+                <span className={styles.editExerciseName}>{name}</span>
+                <div className={styles.editFields}>
+                  <div className={styles.editField}>
+                    <span className={styles.editFieldLabel}>Sets</span>
+                    <input
+                      aria-label={`Sets for ${name}`}
+                      type="number"
+                      min="1"
+                      className={styles.editInput}
+                      value={editExercises[i]?.sets ?? ""}
+                      onChange={(e) => updateExercise(i, "sets", e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.editField}>
+                    <span className={styles.editFieldLabel}>
+                      {unit === "reps" ? "Reps" : "Seconds"}
+                    </span>
+                    <input
+                      aria-label={valueLabelText}
+                      type="number"
+                      min="1"
+                      className={styles.editInput}
+                      value={editExercises[i]?.value ?? ""}
+                      onChange={(e) => updateExercise(i, "value", e.target.value)}
+                    />
+                    <span className={styles.unitLabel}>{unit}</span>
+                  </div>
+                  <div className={styles.editField}>
+                    <span className={styles.editFieldLabel}>Rest (s)</span>
+                    <input
+                      aria-label={`Rest for ${name}`}
+                      type="number"
+                      min="0"
+                      className={styles.editInput}
+                      value={editExercises[i]?.rest ?? ""}
+                      onChange={(e) => updateExercise(i, "rest", e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className={styles.submitRow}>
+          <button className={styles.submitBtn} onClick={handleEditConfirm}>
+            Add Activity
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const stepLabel =
+    activeCategory
+      ? ACTIVITY_TYPE_CONFIG[activeCategory].pickerLabel
+      : screen === "climbing"
+      ? ACTIVITY_TYPE_CONFIG.climbing.pickerLabel
+      : null;
 
   return (
     <div className={styles.overlay} data-testid="modal-overlay" onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          {selectedCategory ? (
+          {screen !== "category" && (
             <button className={styles.backBtn} onClick={handleBack}>
               ← Back
             </button>
-          ) : null}
+          )}
           <span className={styles.modalTitle}>
-            {selectedCategory
+            {stepLabel
               ? `${stepLabel} — ${dayLabel}`
               : `Add Activity — ${dayLabel}`}
           </span>
@@ -210,7 +348,10 @@ export function AddActivityModal({
           </button>
         </div>
 
-        {selectedCategory ? renderStep2() : renderCategoryPicker()}
+        {screen === "category" && renderCategoryPicker()}
+        {screen === "climbing" && renderClimbing()}
+        {screen === "tabs" && renderTabs()}
+        {screen === "edit" && renderEdit()}
       </div>
     </div>
   );

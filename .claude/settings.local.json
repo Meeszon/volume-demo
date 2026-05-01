@@ -41,7 +41,10 @@
       "Bash(npx vite *)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Recurse -Directory)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Force)",
-      "Bash(Select-Object Name, FullName)"
+      "Bash(Select-Object Name, FullName)",
+      "Bash(Get-ChildItem src *)",
+      "Bash(Select-String -Pattern \"\\\\.tsx?$\")",
+      "Bash(Sort-Object)"
     ]
   }
 }

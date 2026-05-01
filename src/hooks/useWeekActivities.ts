@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import type { DropResult } from "@hello-pangea/dnd";
-import type { Activity, ActivityType, Columns, DbActivity } from "../types";
+import type { Activity, ActivityType, Columns, DbActivity, ActivityDetails, FocusOption } from "../types";
 import { useAuth } from "../contexts/AuthContext";
 import {
   fetchActivities,
@@ -10,6 +10,7 @@ import {
   moveActivity,
 } from "../data/activitiesApi";
 import { ACTIVITY_TYPE_CONFIG } from "../data/activityTypeConfig";
+import { computeSubtitle } from "../utils/computeSubtitle";
 
 const DAY_NAMES = [
   "Monday",
@@ -36,10 +37,12 @@ function dayIdToISODate(dayId: string, weekMonday: Date): string {
 }
 
 function dbActivityToUi(dbAct: DbActivity): Activity {
-  let subtitle = dbAct.type.charAt(0).toUpperCase() + dbAct.type.slice(1);
-  if (dbAct.type === "climbing" && dbAct.duration_minutes) {
-    subtitle = `${dbAct.duration_minutes} min`;
-  }
+  const subtitle = computeSubtitle(
+    dbAct.type,
+    dbAct.details,
+    dbAct.focus as FocusOption | null,
+    dbAct.duration_minutes,
+  );
   return {
     id: dbAct.id,
     type: dbAct.type,
@@ -120,7 +123,7 @@ export function useWeekActivities(weekMonday: Date) {
   );
 
   const addActivity = useCallback(
-    async (dayId: string, type: ActivityType, title: string, focus?: string, durationMinutes?: number) => {
+    async (dayId: string, type: ActivityType, title: string, focus?: string | null, durationMinutes?: number | null, details?: ActivityDetails | null) => {
       const userId = session?.user?.id;
       if (!userId) return;
 
@@ -139,6 +142,7 @@ export function useWeekActivities(weekMonday: Date) {
         title,
         focus: focus ?? null,
         duration_minutes: durationMinutes ?? null,
+        details: details ?? null,
         order,
         created_at: new Date().toISOString(),
       };
@@ -153,6 +157,7 @@ export function useWeekActivities(weekMonday: Date) {
           title,
           focus: focus ?? null,
           duration_minutes: durationMinutes ?? null,
+          details: details ?? null,
           order,
         });
         setDbActivities((prev) =>
