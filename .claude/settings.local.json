@@ -32,7 +32,10 @@
       "Bash(gunzip)",
       "Bash(tar -xz -C /tmp/design_bundle)",
       "Read(//tmp/**)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(gh repo *)",
+      "Bash(gh label *)",
+      "Bash(gh issue *)"
     ]
   }
 }

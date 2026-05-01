@@ -18,10 +18,10 @@ const CATEGORIES: Array<{ type: ActivityType; label: string }> = [
 ];
 
 const TYPE_COLORS: Record<ActivityType, string> = {
-  climbing: "#DA2128",
-  conditioning: "#FF8B00",
-  mobility: "#8B5CF6",
-  warmup: "#5CBBAE",
+  climbing: "#F5A623",
+  conditioning: "#4DACF7",
+  mobility: "#EF4E8B",
+  warmup: "#7C4DFF",
 };
 
 export function AddActivityModal({
