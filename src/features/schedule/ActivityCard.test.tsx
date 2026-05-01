@@ -10,6 +10,7 @@ import type {
 
 const task: Activity = {
   id: "a1",
+  type: "conditioning",
   title: "Pull Ups",
   subtitle: "Conditioning",
   accent: "#FF8B00",
@@ -30,8 +31,9 @@ describe("ActivityCard", () => {
         task={task}
         provided={provided}
         snapshot={snapshot}
-        dayId="Monday"
         onDelete={vi.fn()}
+        onOpenPanel={vi.fn()}
+        isLogged={false}
       />,
     );
 
@@ -45,8 +47,9 @@ describe("ActivityCard", () => {
         task={task}
         provided={provided}
         snapshot={snapshot}
-        dayId="Monday"
         onDelete={vi.fn()}
+        onOpenPanel={vi.fn()}
+        isLogged={false}
       />,
     );
 
@@ -60,8 +63,9 @@ describe("ActivityCard", () => {
         task={task}
         provided={provided}
         snapshot={snapshot}
-        dayId="Monday"
         onDelete={vi.fn()}
+        onOpenPanel={vi.fn()}
+        isLogged={false}
       />,
     );
 
@@ -79,15 +83,16 @@ describe("ActivityCard", () => {
         task={task}
         provided={provided}
         snapshot={snapshot}
-        dayId="Monday"
         onDelete={onDelete}
+        onOpenPanel={vi.fn()}
+        isLogged={false}
       />,
     );
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
     await user.click(screen.getByRole("button", { name: /confirm/i }));
 
-    expect(onDelete).toHaveBeenCalledWith("Monday", "a1");
+    expect(onDelete).toHaveBeenCalledWith("a1");
   });
 
   it("does not call onDelete when cancel is clicked", async () => {
@@ -98,8 +103,9 @@ describe("ActivityCard", () => {
         task={task}
         provided={provided}
         snapshot={snapshot}
-        dayId="Monday"
         onDelete={onDelete}
+        onOpenPanel={vi.fn()}
+        isLogged={false}
       />,
     );
 
@@ -116,8 +122,9 @@ describe("ActivityCard", () => {
         task={task}
         provided={provided}
         snapshot={snapshot}
-        dayId="Monday"
         onDelete={vi.fn()}
+        onOpenPanel={vi.fn()}
+        isLogged={false}
       />,
     );
 

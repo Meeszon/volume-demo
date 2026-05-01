@@ -13,19 +13,20 @@ export const DAYS: Day[] = [
 export const initialData: Columns = {
   Monday: [],
   Tuesday: [
-    { id: "1", title: "Weighted Pull Ups", subtitle: "4 Reps x 4 Sets", grade: "", accent: "#4DACF7" },
-    { id: "2", title: "Lateral Raises", subtitle: "10 Reps x 3 Sets", grade: "", accent: "#4DACF7" },
+    { id: "1", type: "conditioning", title: "Weighted Pull Ups", subtitle: "4 Reps x 4 Sets", grade: "", accent: "#4DACF7" },
+    { id: "2", type: "conditioning", title: "Lateral Raises", subtitle: "10 Reps x 3 Sets", grade: "", accent: "#4DACF7" },
   ],
   Wednesday: [],
   Thursday: [
     {
       id: "3",
+      type: "warmup",
       title: "General Warm Up",
       subtitle: "Cossack Squat, Leg Swings, Press Ups..",
       grade: "",
       accent: "#7C4DFF",
     },
-    { id: "4", title: "Strength Intervals", subtitle: "5 Problems x 3 Sets", grade: "6C - 7A", accent: "#F5A623" },
+    { id: "4", type: "climbing", title: "Strength Intervals", subtitle: "5 Problems x 3 Sets", grade: "6C - 7A", accent: "#F5A623" },
   ],
   Friday: [],
   Saturday: [],

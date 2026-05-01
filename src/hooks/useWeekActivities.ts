@@ -48,9 +48,12 @@ function dbActivityToUi(dbAct: DbActivity): Activity {
   }
   return {
     id: dbAct.id,
+    type: dbAct.type,
     title: dbAct.title,
     subtitle,
     accent: TYPE_ACCENTS[dbAct.type],
+    intentNodeId: dbAct.intent_node_id,
+    durationMinutes: dbAct.duration_minutes,
   };
 }
 
@@ -170,7 +173,7 @@ export function useWeekActivities(weekMonday: Date) {
   );
 
   const removeActivity = useCallback(
-    async (_dayId: string, activityId: string) => {
+    async (activityId: string) => {
       const prev = dbActivities;
       setDbActivities((current) =>
         current.filter((a) => a.id !== activityId),

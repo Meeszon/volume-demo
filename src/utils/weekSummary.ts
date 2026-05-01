@@ -14,7 +14,14 @@ const TYPE_COLOURS: Record<ActivityType, string> = {
   warmup: "#7C4DFF",
 };
 
-const ACTIVITY_TYPES: ActivityType[] = [
+export const ACTIVITY_LABELS: Record<ActivityType, string> = {
+  climbing: "Climbing",
+  conditioning: "Conditioning",
+  mobility: "Mobility",
+  warmup: "Warmup",
+};
+
+export const ACTIVITY_TYPES: ActivityType[] = [
   "climbing",
   "conditioning",
   "mobility",

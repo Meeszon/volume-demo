@@ -59,7 +59,7 @@ describe("SchedulePage", () => {
   it("does not show 'Rest Day' for a day that has activities", () => {
     const columns: Columns = {
       ...EMPTY_COLUMNS,
-      Monday: [{ id: "a1", title: "Pull Ups", subtitle: "Conditioning", accent: "#FF8B00" }],
+      Monday: [{ id: "a1", type: "conditioning", title: "Pull Ups", subtitle: "Conditioning", accent: "#FF8B00" }],
     };
 
     mockUseWeekActivities.mockReturnValue({

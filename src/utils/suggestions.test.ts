@@ -37,6 +37,7 @@ const goal: Goal = {
 const acts: Activity[] = [
   {
     id: "act-exact",
+    type: "climbing",
     title: "Exact match",
     subtitle: "",
     accent: "#fff",
@@ -44,6 +45,7 @@ const acts: Activity[] = [
   },
   {
     id: "act-ancestor",
+    type: "climbing",
     title: "Ancestor match",
     subtitle: "",
     accent: "#fff",
@@ -51,6 +53,7 @@ const acts: Activity[] = [
   },
   {
     id: "act-no-match",
+    type: "climbing",
     title: "No match",
     subtitle: "",
     accent: "#fff",
@@ -58,6 +61,7 @@ const acts: Activity[] = [
   },
   {
     id: "act-no-tags",
+    type: "climbing",
     title: "No tags",
     subtitle: "",
     accent: "#fff",
@@ -105,6 +109,7 @@ describe("getSuggestedActivities", () => {
   it("ranks higher-scoring activities first when both primary", () => {
     const multiTagAct: Activity = {
       id: "act-multi",
+      type: "climbing",
       title: "Multi",
       subtitle: "",
       accent: "#fff",

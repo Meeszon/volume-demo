@@ -58,11 +58,14 @@ export interface Goal {
 // Schedule / kanban
 export interface Activity {
   id: string;
+  type: ActivityType;
   title: string;
   subtitle: string;
   grade?: string;
   accent: string;
   goalTags?: GoalTag[];
+  intentNodeId?: string | null;
+  durationMinutes?: number | null;
 }
 
 export interface Day {

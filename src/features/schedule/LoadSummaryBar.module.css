@@ -1,0 +1,138 @@
+.bar {
+  height: 48px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 24px;
+}
+
+.entries {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.emptyHint {
+  font-size: 12px;
+  color: #b0afab;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.entryLabel {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.progressTrack {
+  width: 72px;
+  height: 5px;
+  background: #f0f0f0;
+  border-radius: 9999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+  min-width: 0;
+}
+
+.entryCount {
+  font-size: 12px;
+  color: #9d9c99;
+  white-space: nowrap;
+}
+
+/* ── Settings cog ── */
+
+.cogWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cogBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cogBtn:hover {
+  background: #f5f5f5;
+}
+
+/* ── Popover ── */
+
+.popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 12px 14px;
+  min-width: 186px;
+  z-index: 10;
+}
+
+.popoverTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #413f39;
+  margin-bottom: 10px;
+}
+
+.popoverRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  cursor: default;
+}
+
+.popoverRow:last-child {
+  margin-bottom: 0;
+}
+
+.popoverLabel {
+  font-size: 13px;
+  color: #787878;
+}
+
+.popoverInput {
+  width: 48px;
+  height: 26px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 13px;
+  font-family: inherit;
+  color: #413f39;
+  padding: 0 4px;
+}
+
+.popoverInput:focus {
+  outline: none;
+  border-color: #b0afab;
+}

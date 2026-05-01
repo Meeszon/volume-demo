@@ -35,7 +35,10 @@
       "Bash(git config *)",
       "Bash(gh repo *)",
       "Bash(gh label *)",
-      "Bash(gh issue *)"
+      "Bash(gh issue *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Recurse -File)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(npx vite *)"
     ]
   }
 }

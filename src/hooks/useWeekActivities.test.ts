@@ -272,7 +272,7 @@ describe("useWeekActivities", () => {
       expect(result.current.columns.Monday).toHaveLength(1);
 
       act(() => {
-        result.current.deleteActivity("Monday", "a1");
+        result.current.deleteActivity("a1");
       });
 
       expect(result.current.columns.Monday).toHaveLength(0);
@@ -289,7 +289,7 @@ describe("useWeekActivities", () => {
       await waitFor(() => expect(result.current.loading).toBe(false));
 
       await act(async () => {
-        await result.current.deleteActivity("Monday", "a1");
+        await result.current.deleteActivity("a1");
       });
 
       expect(result.current.columns.Monday).toHaveLength(1);

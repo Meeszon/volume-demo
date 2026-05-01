@@ -1,22 +1,35 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { AnimatePresence } from "framer-motion";
 import { getMonday, getWeekDays, shiftWeek, formatWeekLabel, isCurrentWeek } from "../../utils/weekDates";
 import { useWeekActivities } from "../../hooks/useWeekActivities";
+import { useWeeklyTargets } from "../../hooks/useWeeklyTargets";
+import { useActivityLog } from "../../hooks/useActivityLog";
+import { getWeekSummary } from "../../utils/weekSummary";
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "../../components/icons";
 import { ActivityCard } from "./ActivityCard";
 import { AddActivityModal } from "./AddActivityModal";
+import { LoadSummaryBar } from "./LoadSummaryBar";
+import { ActivityDetailPanel } from "./ActivityDetailPanel";
+import type { Activity } from "../../types";
 import styles from "./schedule.module.css";
 
 export function SchedulePage() {
   const [modalDayId, setModalDayId] = useState<string | null>(null);
   const [weekMonday, setWeekMonday] = useState(() => getMonday(new Date()));
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
 
   const { columns, loading, error, addActivity, deleteActivity, handleDragEnd } =
     useWeekActivities(weekMonday);
 
+  const { targets, setTarget } = useWeeklyTargets();
+  const { isLogged, getLog, saveLog } = useActivityLog();
+
   const days = useMemo(() => getWeekDays(weekMonday), [weekMonday]);
   const weekLabel = useMemo(() => formatWeekLabel(weekMonday), [weekMonday]);
   const onCurrentWeek = useMemo(() => isCurrentWeek(weekMonday), [weekMonday]);
+
+  const summary = useMemo(() => getWeekSummary(Object.values(columns).flat(), targets), [columns, targets]);
 
   const goToPrevWeek = useCallback(() => setWeekMonday((m) => shiftWeek(m, -1)), []);
   const goToNextWeek = useCallback(() => setWeekMonday((m) => shiftWeek(m, 1)), []);
@@ -79,6 +92,8 @@ export function SchedulePage() {
         </div>
       </header>
 
+      <LoadSummaryBar summary={summary} targets={targets} onSetTarget={setTarget} />
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <div
           className={styles.boardScroll}
@@ -112,7 +127,14 @@ export function SchedulePage() {
                         {!loading && dayActivities.map((task, index) => (
                           <Draggable key={task.id} draggableId={task.id} index={index}>
                             {(provided, snapshot) => (
-                              <ActivityCard task={task} provided={provided} snapshot={snapshot} dayId={day.id} onDelete={deleteActivity} />
+                              <ActivityCard
+                                task={task}
+                                provided={provided}
+                                snapshot={snapshot}
+                                onDelete={deleteActivity}
+                                onOpenPanel={setSelectedActivity}
+                                isLogged={isLogged(task.id)}
+                              />
                             )}
                           </Draggable>
                         ))}
@@ -126,6 +148,7 @@ export function SchedulePage() {
           </div>
         </div>
       </DragDropContext>
+
       {modalDay && (
         <AddActivityModal
           dayLabel={`${modalDay.id} ${modalDay.date}`}
@@ -135,6 +158,20 @@ export function SchedulePage() {
           }}
         />
       )}
+
+      <AnimatePresence>
+        {selectedActivity && (
+          <ActivityDetailPanel
+            key={selectedActivity.id}
+            activity={selectedActivity}
+            isLogged={isLogged(selectedActivity.id)}
+            logData={getLog(selectedActivity.id)}
+            onClose={() => setSelectedActivity(null)}
+            onDelete={deleteActivity}
+            onSaveLog={saveLog}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
