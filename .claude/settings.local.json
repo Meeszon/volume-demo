@@ -39,7 +39,9 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Recurse -File)",
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(npx vite *)",
-      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Recurse -Directory)"
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Recurse -Directory)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\meesz\\\\Documents\\\\OL\\\\volume\\\\volume-demo\" -Force)",
+      "Bash(Select-Object Name, FullName)"
     ]
   }
 }

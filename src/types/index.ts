@@ -93,8 +93,56 @@ export interface DbActivity {
 // Activity templates
 export type ActivityCategory = "conditioning" | "mobility" | "warmup";
 
-export interface ActivityTemplate {
+export interface TemplateExercise {
   name: string;
-  category: ActivityCategory;
-  exercises?: string[];
+  unit: "reps" | "seconds";
+  defaultSets: number;
+  defaultValue: number;
+  defaultRest: number;
 }
+
+export type ActivityTemplate =
+  | {
+      name: string;
+      category: ActivityCategory;
+      kind: "block";
+      exercises: TemplateExercise[];
+    }
+  | {
+      name: string;
+      category: ActivityCategory;
+      kind: "exercise";
+      unit: "reps" | "seconds";
+      defaultSets: number;
+      defaultValue: number;
+      defaultRest: number;
+    };
+
+// Activity details (for non-climbing activities)
+export interface ExerciseDetail {
+  name: string;
+  sets: number;
+  value: number;
+  unit: "reps" | "seconds";
+  rest: number;
+}
+
+export type ActivityDetails =
+  | { kind: "block"; exercises: ExerciseDetail[] }
+  | { kind: "exercise"; sets: number; value: number; unit: "reps" | "seconds"; rest: number };
+
+// Focus options (for climbing sessions)
+export type FocusOption =
+  | "Endurance"
+  | "Power"
+  | "Technique"
+  | "Footwork"
+  | "Finger Strength";
+
+export const FOCUS_OPTIONS: FocusOption[] = [
+  "Endurance",
+  "Power",
+  "Technique",
+  "Footwork",
+  "Finger Strength",
+];

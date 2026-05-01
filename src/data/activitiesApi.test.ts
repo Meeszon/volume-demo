@@ -90,7 +90,7 @@ describe("activitiesApi", () => {
         scheduled_date: "2026-04-28",
         type: "mobility" as const,
         title: "Ankle Flexibility",
-        intent_node_id: null,
+        focus: null,
         duration_minutes: null,
         order: 0,
       };

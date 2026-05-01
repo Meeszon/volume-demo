@@ -1,34 +1,40 @@
 import type { ActivityCategory, ActivityTemplate } from "../types";
 
 export const ACTIVITY_TEMPLATES: ActivityTemplate[] = [
-  // Conditioning
-  { name: "Weighted Pull Ups", category: "conditioning" },
-  { name: "Shoulder Press", category: "conditioning" },
-  { name: "Bench Press", category: "conditioning" },
-  { name: "Deadlift", category: "conditioning" },
-  { name: "Seated Shoulder Rotation", category: "conditioning" },
+  // Conditioning — single exercises, reps-based
+  { name: "Weighted Pull Ups", category: "conditioning", kind: "exercise", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+  { name: "Shoulder Press", category: "conditioning", kind: "exercise", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+  { name: "Bench Press", category: "conditioning", kind: "exercise", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+  { name: "Deadlift", category: "conditioning", kind: "exercise", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+  { name: "Seated Shoulder Rotation", category: "conditioning", kind: "exercise", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
 
-  // Mobility
+  // Mobility — Ankle Flexibility is a block; others are single exercises
   {
     name: "Ankle Flexibility",
     category: "mobility",
-    exercises: ["Calf Stretch", "Donkey Calf Raise", "Fishermans - Passive"],
+    kind: "block",
+    exercises: [
+      { name: "Calf Stretch", unit: "seconds", defaultSets: 3, defaultValue: 30, defaultRest: 60 },
+      { name: "Donkey Calf Raise", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+      { name: "Fishermans - Passive", unit: "seconds", defaultSets: 3, defaultValue: 30, defaultRest: 60 },
+    ],
   },
-  { name: "Pancake Stretch", category: "mobility" },
-  { name: "Revolver Stretch", category: "mobility" },
-  { name: "Cossack Squats", category: "mobility" },
-  { name: "Pigeon Pose", category: "mobility" },
+  { name: "Pancake Stretch", category: "mobility", kind: "exercise", unit: "seconds", defaultSets: 3, defaultValue: 30, defaultRest: 60 },
+  { name: "Revolver Stretch", category: "mobility", kind: "exercise", unit: "seconds", defaultSets: 3, defaultValue: 30, defaultRest: 60 },
+  { name: "Cossack Squats", category: "mobility", kind: "exercise", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+  { name: "Pigeon Pose", category: "mobility", kind: "exercise", unit: "seconds", defaultSets: 3, defaultValue: 30, defaultRest: 60 },
 
-  // Warm Up
+  // Warm Up — single block with 5 exercises
   {
     name: "General Warm Up",
     category: "warmup",
+    kind: "block",
     exercises: [
-      "Leg Swings",
-      "Scapular Push Ups",
-      "Cossack Squats",
-      "Face Pulls",
-      "Split Squats",
+      { name: "Leg Swings", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+      { name: "Scapular Push Ups", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+      { name: "Cossack Squats", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+      { name: "Face Pulls", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
+      { name: "Split Squats", unit: "reps", defaultSets: 3, defaultValue: 10, defaultRest: 60 },
     ],
   },
 ];

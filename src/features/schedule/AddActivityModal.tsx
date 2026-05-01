@@ -85,9 +85,9 @@ export function AddActivityModal({
             />
             <div className={styles.templateText}>
               <span className={styles.activityTitle}>{t.name}</span>
-              {t.exercises && (
+              {t.kind === "block" && (
                 <span className={styles.exerciseList}>
-                  {t.exercises.join(", ")}
+                  {t.exercises.map((e) => e.name).join(", ")}
                 </span>
               )}
             </div>

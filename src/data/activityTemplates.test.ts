@@ -5,14 +5,11 @@ import {
 } from "./activityTemplates";
 
 describe("ACTIVITY_TEMPLATES", () => {
-  it("every template has a name, category, and exercises is either undefined or an array", () => {
+  it("every template has a name, category, and a kind of block or exercise", () => {
     for (const t of ACTIVITY_TEMPLATES) {
       expect(t.name).toBeTruthy();
       expect(["conditioning", "mobility", "warmup"]).toContain(t.category);
-      if (t.exercises !== undefined) {
-        expect(Array.isArray(t.exercises)).toBe(true);
-        expect(t.exercises.length).toBeGreaterThan(0);
-      }
+      expect(["block", "exercise"]).toContain(t.kind);
     }
   });
 
@@ -44,36 +41,50 @@ describe("ACTIVITY_TEMPLATES", () => {
     ]);
   });
 
-  it("Ankle Flexibility has its 3 exercises in order", () => {
+  it("Ankle Flexibility is a block with 3 TemplateExercise objects in order", () => {
     const ankle = ACTIVITY_TEMPLATES.find(
       (t) => t.name === "Ankle Flexibility",
     )!;
-    expect(ankle.exercises).toEqual([
-      "Calf Stretch",
-      "Donkey Calf Raise",
-      "Fishermans - Passive",
-    ]);
+    expect(ankle.kind).toBe("block");
+    if (ankle.kind === "block") {
+      expect(ankle.exercises.map((e) => e.name)).toEqual([
+        "Calf Stretch",
+        "Donkey Calf Raise",
+        "Fishermans - Passive",
+      ]);
+      expect(ankle.exercises[0]).toMatchObject({ unit: "seconds", defaultSets: 3 });
+      expect(ankle.exercises[1]).toMatchObject({ unit: "reps", defaultSets: 3 });
+    }
   });
 
-  it("General Warm Up has all 5 exercises in order", () => {
+  it("General Warm Up is a block with 5 TemplateExercise objects in order", () => {
     const warmup = ACTIVITY_TEMPLATES.find(
       (t) => t.name === "General Warm Up",
     )!;
-    expect(warmup.exercises).toEqual([
-      "Leg Swings",
-      "Scapular Push Ups",
-      "Cossack Squats",
-      "Face Pulls",
-      "Split Squats",
-    ]);
+    expect(warmup.kind).toBe("block");
+    if (warmup.kind === "block") {
+      expect(warmup.exercises.map((e) => e.name)).toEqual([
+        "Leg Swings",
+        "Scapular Push Ups",
+        "Cossack Squats",
+        "Face Pulls",
+        "Split Squats",
+      ]);
+    }
   });
 
-  it("conditioning templates have no exercises", () => {
+  it("conditioning templates are exercises with reps unit and default values", () => {
     const conditioning = ACTIVITY_TEMPLATES.filter(
       (t) => t.category === "conditioning",
     );
     for (const t of conditioning) {
-      expect(t.exercises).toBeUndefined();
+      expect(t.kind).toBe("exercise");
+      if (t.kind === "exercise") {
+        expect(t.unit).toBe("reps");
+        expect(t.defaultSets).toBe(3);
+        expect(t.defaultValue).toBe(10);
+        expect(t.defaultRest).toBe(60);
+      }
     }
   });
 });
